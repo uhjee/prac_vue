@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="test-input" />
+    <script type="text/javascript">
+        // Constructor Function :: element와 최초의 데이터를 받아온다.
+        function MyCtor(element, data) {
+            this.data = data;
+            this.element = element;
+            element.value = data;
+            console.log(this);
+            // callback으로 자기 자신(MyCtor)을 지정
+            element.addEventListener("change", this, false);
+        }
+
+        // eventListener의 implement
+        MyCtor.prototype.handleEvent = function (e) {
+            switch (e.type) {
+                case "change":
+                    this.change(this.element.value);
+            }
+        };
+
+        MyCtor.prototype.change = function (value) {
+            console.log(value);
+            this.data = value;
+            this.element.value = value;
+        }
+        var obj = new MyCtor(document.getElementById('test-input'), "10");
+
+        // 변화 test..
+        var i = 0;
+        setInterval(function () {
+            obj.change(parseInt(obj.element.value) + ++i, 3000);
+        }, 5000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- active class의 존재 여부가 데이터 속성 isActive의 참 속성에 의해 결정되는 것 의미 -->
+    <div id="app">
+        <div class="static" v-bind:class="{active: isActive, 'text-danger' : hasError}">
+            static
+        </div>
+        <div class="static" v-bind:class="classObject">
+            classObject
+        </div>
+        <div class="static" v-bind:class="classObject1">
+            classObject1
+        </div>
+        <div class="static" v-bind:class="[activeClass, errorClass]">
+            classObject2
+        </div>
+        <div class="static" v-bind:class="[isActive ? activeClass : '', errorClass]">
+            삼항연산자를 통해 class 할당
+        </div>
+    </div>
+    <div id="app2">
+        <my-component class="baz boo"></my-component>
+    </div>
+    <script>
+        Vue.component('myCompo', {
+            template: '<p class="foo bar">Hi</p>'
+        })
+        Vue.component('my-component', {
+            template: '<div>사용자 정의 컴포넌트 입니다!</div>'
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                // 아래의 boolean으로 element에 class를 동적으로 붙였다 뗐다 할 수 있다.
+                isActive: true,
+                hasError: false,
+                classObject: {
+                    isActive: true,
+                    hasErroe: false
+                },
+                activeClass: 'active',
+                errorClass: 'text-danger'
+            },
+            // 연산 결과로도 class의 동적 적용이 가능하다
+            computed: {
+                classObject1: function () {
+                    return {
+                        active: this.isActive && !this.hasError,
+                        'text-danger': this.hasError && this.hasError.type === 'fatal'
+                    }
+                }
+            }
+        })
+
+        var vm2 = new Vue({
+            el: "#app2"
+        })
+    </script>
+</body>
+
+</html>
