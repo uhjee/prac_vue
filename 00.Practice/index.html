@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+
+        <div id="app">
+            {{ message }}
+
+            <div v-if="seen">Now you see me</div>
+        </div>
+
+<!-- v- 접두어는 렌더링된 DOM에 특수한 반응형 동작
+v-bind 속성은 디렉티브:: Vue에서 제공하는 특수 속성  -->
+        <div id="app-2">
+
+          <span v-bind:title="message">
+            내 위에 마우스 올리면 동적 바인딩된 title 볼 수 있습니다.
+          </span>
+        </div>
+
+<!-- v-for:  Array를 for문으로 출력 -->
+        <div id="app-4">
+          <ol>
+            <li v-for="todo in todos">
+              {{todo.text}}
+            </li>
+          </ol>
+        </div>
+
+<!-- v-on: 이벤트 등록, 함수는 객체의 methods에 등록 -->
+        <div id="app-5">
+          <p>{{message}}</p>
+          <button v-on:click="reverseMessage">메시지 뒤집기</button>
+        </div>
+
+<!-- v-model: 양식에 대한 입력과 앱 상태를 양방향으로 바인딩하는 디렉티브 -->
+        <div id="app-6">
+          <p>{{message}}</p>
+          <input v-model="message">
+        </div>
+
+<!-- todo-item 이라는 Component 등록하여 사용 -->
+        <div id="app-7">
+          <ol>
+            <todo-item
+              v-for="item in groceryList"
+              v-bind:todo="item"
+              v-bind:key="item.id"
+            ></todo-item>
+          </ol>
+        </div>
+
+        <div id="app-8">
+          <input type="checkbox" value="1" v-model="fruits">사과
+          <input type="checkbox" value="2" v-model="fruits">포도
+          <input type="checkbox" value="3" v-model="fruits">배
+          <input type="checkbox" value="4" v-model="fruits">오렌지
+        </div>
+
+
+        <script src="JS/vuePrctice.js"></script>
+    </body>
+</html>
