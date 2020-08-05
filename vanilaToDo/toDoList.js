@@ -1,11 +1,15 @@
 var todoList = {
-    addList: function () {
+    addList: function (e) {
         var contents = document.querySelector('.text-basic');
         if (!contents.value) {
             alert('내용을 입력해주세요.');
             contents.focus();
             return false;
         }
+
+        // if (e.keyCode != 13) {
+        //     return;
+        // }
 
         var tr = document.createElement('tr');
         var input = document.createElement('input');
@@ -216,6 +220,7 @@ var doneList = {
 };
 // 추가 버튼 이벤트 등록
 document.getElementById('btnAdd').addEventListener('click', todoList.addList);
+// document.querySelector("input.text-basic").addEventListener('keyup', todoList.addList);
 // 모두 완료 버튼 이벤트 등록
 document.getElementById('btnDelAll').addEventListener('click', todoList.delAllEle);
 // 마지막 엘레먼트 완료 버튼 이벤트 등록
