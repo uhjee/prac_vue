@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+
+  <body>
+    <input type="text" id="myinput" />
+    <p id="viewvalue"></p>
+
+    <script>
+      // 01. Element 잡아오기
+      var myinputEl = document.getElementById("myinput");
+
+      // 02. 이벤트리스너로 이벤트 등록
+      myinputEl.addEventListener("change", function () {
+        data.myinputValue = myinputEl.value;
+
+        document.getElementById("viewvalue").innerText = data.myinputValue;
+      });
+
+      // 03. 데이터
+      var data = {
+        myinputValue: "",
+      };
+    </script>
+  </body>
+</html>
