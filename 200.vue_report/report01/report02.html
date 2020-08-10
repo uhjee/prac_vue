@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js_report_02</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .input-form {
+            width: 15%;
+        }
+
+        .tbl-employees {
+            border: 2px solid sandybrown;
+            border-spacing: 0px;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid salmon;
+            padding: 10px 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        th {
+            /* border: 1px solid white; */
+            background-color: rgb(241, 145, 121);
+            color: white;
+        }
+    </style>
+</head>
+
+<script type="text/javascript">
+    var eventBus = new Vue();
+</script>
+
+<template id="input-template">
+    <div>
+        <label for="input-name">* 이름</label>
+        <input type="text" id="input-name" class="input-form" v-model="employee.name">
+        <label for="input-dep">* 부서</label>
+        <input type="text" id="input-dep" class="input-form" v-model="employee.dep">
+        <label for="input-rank">* 직급</label>
+        <input type="text" id="input-rank" class="input-form" v-model="employee.rank">
+        <label for="input-tel">* 연락처</label>
+        <input type="text" id="input-tel" class="input-form" v-model="employee.tel">
+        <button class="btn-add" @click="addEmployee">추가</button>
+    </div>
+</template>
+<script type="text/javascript">
+    Vue.component('input-component', {
+        template: '#input-template',
+        data() {
+            return {
+                employee: {
+                    name: '',
+                    dep: '',
+                    rank: '',
+                    tel: ''
+                }
+            }
+        },
+        methods: {
+            addEmployee: function () {
+                if ((this.employee.name === null || this.employee.name === '') ||
+                    (this.employee.dep === null || this.employee.dep === '') ||
+                    (this.employee.rank === null || this.employee.rank === '') ||
+                    (this.employee.tel === null || this.employee.tel === '')) {
+                    alert('정보를 다시 확인해주세요.')
+                    return;
+                }
+
+                console.log(this.employee);
+                eventBus.$emit('add-employee', this.employee);
+
+                // setTimeout(function () {
+                this.employee.name = '';
+                this.employee.dep = '';
+                this.employee.rank = '';
+                this.employee.tel = '';
+                // }.bind(this), 1000);
+            }
+        },
+    })
+</script>
+
+<template id="list-template">
+    <div>
+        <table class="tbl-employees">
+            <thead>
+                <tr>
+                    <th>이 름</th>
+                    <th>부 서</th>
+                    <th>직 급</th>
+                    <th>연락처</th>
+                </tr>
+            </thead>
+            <tbody id="employee-list">
+                <tr v-for="(employee, index) in employeeList" :key="index">
+                    <td>{{employee.name}}</td>
+                    <td>{{employee.dep}}</td>
+                    <td>{{employee.rank}}</td>
+                    <td>{{employee.tel}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+<script type="text/javascript">
+    Vue.component('list-component', {
+        template: '#list-template',
+        created: function () {
+            eventBus.$on('add-employee', this.addEmployee);
+
+        },
+        data() {
+            return {
+                employeeList: [{
+                        name: '가나다',
+                        dep: '개발',
+                        rank: '대리',
+                        tel: '010-5555-4444'
+                    },
+                    {
+                        name: '라마바',
+                        dep: '경영지원',
+                        rank: '사원',
+                        tel: '010-5775-4428'
+                    },
+                    {
+                        name: '홍길동',
+                        dep: '영업',
+                        rank: '과장',
+                        tel: '010-5888-4435'
+                    },
+                    {
+                        name: '이순신',
+                        dep: '컨설팅',
+                        rank: '차장',
+                        tel: '010-8888-8888'
+                    },
+                    {
+                        name: '이길동',
+                        dep: '기술지원',
+                        rank: '사원',
+                        tel: '010-6666-7777'
+                    }
+                ]
+            }
+        },
+        methods: {
+            addEmployee: function (employee) {
+                console.log(employee);
+                // var newEmployee = employee;
+                this.employeeList.push({
+                    name: employee.name,
+                    dep: employee.dep,
+                    rank: employee.rank,
+                    tel: employee.tel
+                });
+            }
+        }
+    })
+</script>
+
+<body>
+    <div id="app">
+        <div id="header" class="header">
+            <h2>report02: Employee List</h2>
+            <input-component></input-component>
+        </div>
+        <list-component></list-component>
+
+
+    </div>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app'
+        })
+    </script>
+</body>
+
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Vue.js_report_01</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+    .input {
+      border: 3px solid tomato;
+      width: 80%;
+      height: 20px;
+      padding: 10px;
+      float: left;
+      font-size: 16px;
+    }
+
+    .btn-add {
+      /* padding: 10px; */
+      width: 10%;
+      height: 40px;
+      background-color: indianred;
+      color: white;
+      float: left;
+      font-size: 12px;
+      /* transitioni : css 속성을 변경할 때 애니메이션 속도  */
+      transition: 0.3s;
+    }
+
+    .btn-add:hover {
+      background-color: whitesmoke;
+      color: tomato;
+    }
+
+    .tbl-names {
+      border: 2px solid sandybrown;
+      border-spacing: 0px;
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    th,
+    td {
+      /* border: 1px solid salmon; */
+      padding: 10px 20px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    th {
+      /* border: 1px solid white; */
+      background-color: rgb(241, 145, 121);
+      color: white;
+    }
+
+    .even {
+      background-color: rgb(235, 216, 213);
+    }
+
+    #string-name-list {
+      margin: 20px;
+    }
+  </style>
+</head>
+
+<!-- 컴포넌트간 데이터 전송을 위한 이벤트 버스 Vue Instance 생성 -->
+<script type="text/javascript">
+  var eventBus = new Vue();
+</script>
+
+<!-- 입력창 컴포넌트 시작 -->
+<template id="input-template">
+  <div>
+    <input class="input" type="text" id="input-name" v-model="name" @keyup.enter="addName" placeholder="이름을 입력하세요.">
+    <button class="btn-add" @click="addName">추가</button>
+  </div>
+</template>
+<script type="text/javascript">
+  Vue.component('input-component', {
+    template: '#input-template',
+    data() {
+      return {
+        name: ""
+      }
+    },
+    methods: {
+      addName: function () {
+        eventBus.$emit('add-name', this.name);
+        this.name = '';
+      }
+    }
+  })
+</script>
+<!-- 입력창 컴포넌트 끝 -->
+
+<!-- 리스트 컴포넌트 시작 -->
+<template id="list-template">
+  <div>
+    <table class="tbl-names">
+      <thead>
+        <tr>
+          <th>이 름</th>
+        </tr>
+      </thead>
+      <tbody id="name-list">
+        <tr v-for="(person, index) in nameList" :key="index" :class="{even: (index+1)%2 === 0 }">
+          <td>
+            {{person.name}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="string-name-list">
+      {{stringNameList}}
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+  Vue.component('list-component', {
+    template: '#list-template',
+    // 컴포넌트의 created 훅을 사용
+    created: function () {
+      // 이벤트버스 인스턴스에 바인딩하여, 이벤트 수신 대기
+      eventBus.$on('add-name', this.addName);
+    },
+    data() {
+      return {
+        nameList: [{
+            name: "가나다"
+          },
+          {
+            name: "라마바"
+          },
+          {
+            name: "홍길동"
+          },
+          {
+            name: "이순신"
+          },
+          {
+            name: "강감찬"
+          },
+
+        ]
+      }
+    },
+    methods: {
+      addName: function (name) {
+        if (name === '' || name == null) {
+          alert('이름을 입력해주세요.')
+          return;
+        }
+
+        this.nameList.push({
+          name: name
+        })
+      }
+    },
+    computed: {
+      stringNameList: function () {
+        let stringNames = '';
+
+        for (let i = 0; i < this.nameList.length; i++) {
+          stringNames += this.nameList[i].name;
+          if (i !== this.nameList.length - 1) {
+            stringNames += ' / '
+          }
+        }
+        return stringNames;
+      }
+    },
+  })
+</script>
+<!-- 리스트 컴포넌트 끝 -->
+
+<body>
+  <div id="app">
+    <div id="header" class="header">
+      <h2>report01: Name List</h2>
+      <!-- 입력 컴포넌트 사용 -->
+      <input-component></input-component>
+    </div>
+    <!-- 테이블 컴포넌트 사용 -->
+    <list-component></list-component>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+    })
+  </script>
+</body>
+
+</html>

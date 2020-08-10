@@ -12,30 +12,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
     <!--  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+    <style>
+        #list {
+            width: 400px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        #list td,
+        #list th {
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        #list>thead>tr {
+            color: yellow;
+            background-color: purple;
+        }
+    </style>
 </head>
+
 
 <!-- contractlist - component 시작 -->
 <!-- 자체 data를 갖고 있지 않다. -->
 <!-- 따라서 외부에서 상태를 제공받아야 한다-> props 사용  -->
-<style>
-    #list {
-        width: 400px;
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-
-    #list td,
-    #list th {
-        border: 1px solid black;
-        text-align: center;
-    }
-
-    #list>thead>tr {
-        color: yellow;
-        background-color: purple;
-    }
-</style>
-
 <template id="listTemplate">
     <div>
         <table id="list">
@@ -61,14 +61,16 @@
 <script type="text/javascript">
     Vue.component('contactlist-component', {
         template: '#listTemplate',
-        props: ['contacts']
+        // 부모에게서 전달 받을 데이터를 props에 넣고, 자신의 데이터와 같이 사용할 수 있다.
+        props: ['contacts'] // 받는 속성의 이름을 지정
     })
 </script>
 <!-- child component :: contractlist - component 끝 -->
 <!-- child component :: search-component 시작 -->
 <template id="searchTemplate">
     <p>
-        이름 : <input type="text" v-model.trim="name" :placeholder="placeholder" @keyup.enter="keyupEvent" />
+        <!-- v-on 지시문으로 자식의 이벤트 핸들 지정 -->
+        이름 : <input type="text" v-model.trim="name" @keyup.enter="keyupEvent" :placeholder="placeholder" />
     </p>
 </template>
 <script type="text/javascript">
@@ -84,6 +86,7 @@
             keyupEvent: function (e) {
                 var val = e.target.value;
                 if (val.length >= 2) {
+                    // 부모의 search 속성(사용자 지정 이벤트)으로 val라는 데이터를 전달
                     this.$emit('search', val);
                 } else {
                     this.$emit('search', '');
@@ -93,10 +96,13 @@
     })
 </script>
 <!-- search-component 끝 -->
-<!-- search-contact-component 시작 -->
+<!-- Parent component :: search-contact-component 시작 -->
 <template id="searchcontactTemplate">
     <div>
+        <!-- 두 개의 자식 component 사용 -->
+        <!-- v-on:search 사용자 지정 이벤트를 통해 자식의 데이터를 받아온다. -->
         <search-component placeholder="두글자 이상 입력후 엔터!" v-on:search="searchEvent"></search-component>
+        <!-- 부모에서 자식으로 v-bind를 통해 자식의 props 속성으로 데이터나 수식을 전달할 수 있다. -->
         <contactlist-component v-bind:contacts="contactlist"></contactlist-component>
         <div v-show="isProcessing === true">조회중</div>
     </div>
@@ -111,6 +117,7 @@
             }
         },
         methods: {
+            // 안에 인자는 자식에서 $emit 메소드의 두번째 인자 val을 받는 것
             searchEvent: function (name) {
                 if (name == '')
                     this.contactlist = [];
