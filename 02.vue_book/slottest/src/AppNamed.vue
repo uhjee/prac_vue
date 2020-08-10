@@ -6,8 +6,8 @@
 
       <div slot="sidebar">
         <ul class="menu">
-          <li v-for="sidebar in sidebars">
-            <a v-bind:href="sidebar.link">{{sidebar.menu}}</a>
+          <li v-for="sidebar in sidebars" :key="index">
+            <a v-bind:href="sidebar.link">{{ sidebar.menu }}</a>
           </li>
         </ul>
       </div>
