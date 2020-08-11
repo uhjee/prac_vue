@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<!-- 01. 첫번째 template 시작 -->
+<template id="first-component">
+  <div id="div-first">
+    <h1>첫 번째 컴포넌트입니다.</h1>
+    <h3>{{ (new Date()).toTimeString()}}</h3>
+  </div>
+</template>
+<!-- 01. 첫번째 template 끝 -->
+<!-- 02. 두번째 template 시작 -->
+<template id="second-component">
+  <div id="div-second">
+    <h1>두 번째 컴포넌트입니다.</h1>
+    <h3>{{ (new Date()).toTimeString()}}</h3>
+  </div>
+</template>
+<!-- 02. 두번째 template 끝 -->
+<!-- 03. 세번째 template 시작 -->
+<template id="third-component">
+  <div id="div-third">
+    <h1>세 번째 컴포넌트입니다.</h1>
+    <h3>{{ (new Date()).toTimeString()}}</h3>
+  </div>
+</template>
+<!-- 03. 세번째 template 끝 -->
+
+<!-- HTML Body 시작 -->
+
+<body>
+  <div id="app">
+    <div>
+      <button class="btn-change" @click="changeComponent('first-component')">1st-component</button>
+      <button class="btn-change" @click="changeComponent('second-component')">2nd-component</button>
+      <button class="btn-change" @click="changeComponent('third-component')">3rd-component</button>
+    </div>
+    <div id="container">
+      <!-- 정적인 화면이기때문에 keep-alive 사용해서 캐싱처리... include에서 사용되는 이름은 각 컴포넌트의 name 속성 -->
+      <keep-alive include="first-component, second-component, third-component">
+        <!-- is 속성으로 로컬 컴포넌트를 바인딩하여 동적 컴포넌트 구현 -->
+        <component :is="currentView"
+          :style="{backgroundColor : getStyle.color, textAlign : getStyle.align, margin: '20px', padding: '15px' }">
+        </component>
+      </keep-alive>
+    </div>
+  </div>
+
+  <script>
+    // 전역 컴포넌트로 등록
+    Vue.component('first-component', {
+      template: '#first-component',
+      name: 'first-component'
+    })
+    Vue.component('second-component', {
+      template: '#second-component',
+      name: 'second-component'
+    })
+    Vue.component('third-component', {
+      template: '#third-component',
+      name: 'third-component'
+    })
+
+    let vm = new Vue({
+      el: "#app",
+      data() {
+        return {
+          // default : first-component
+          currentView: 'first-component'
+        }
+      },
+      methods: {
+        changeComponent(view) {
+          this.currentView = view;
+        }
+      },
+      computed: {
+        getStyle() {
+          let returnColor = '';
+          let returnAlign = '';
+
+          switch (this.currentView) {
+            case 'second-component':
+              returnColor = 'lightsteelblue';
+              returnAlign = 'center';
+              break;
+
+            case 'third-component':
+              returnColor = 'navajowhite';
+              returnAlign = 'right';
+              break;
+
+            default:
+              returnColor = 'lightsalmon';
+              returnAlign = 'left';
+              break;
+          }
+          return {
+            color: returnColor,
+            align: returnAlign
+          }
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

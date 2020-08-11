@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 6];
+        // console.log('nums: ', nums);
+
+        // set을 사용하여 중복 제거
+        let uniqueNums = new Set(nums);
+        // console.log('set : ', uniqueNums);
+        // console.log('have \'5\'? : ', uniqueNums.has(5));
+        console.log('setSize: ', uniqueNums.size);
+
+
+        // Expression bodies: 표현식의 결과가 반환됨------------------------------
+        // map을 사용하여 리턴 - 원본은 건드리지 않는다
+        let plusOne = nums.map(n => n + 1);
+        // console.log('nums: ', nums);
+        // console.log('plusOne: ', plusOne);
+
+        // object로 리턴
+        let plusOne2 = nums.map(n => ({
+            origin: n,
+            plusOneval: n + 1
+        }))
+        // console.log(plusOne2);
+
+        // Statement bodies: 중괄호 사용하여 블럭 내부를 실행만 함, 반환을 위해선 return 명시 ---------
+        let arr = [];
+
+        plusOne.forEach(v => {
+            if (v % 3 === 0) arr.push(v);
+        })
+        // console.log(arr);
+
+
+        // Lexical this : 일반 함수의 자신을 호출하는 객체를 가리키는 dynamic this 가 아니라,
+        //                arrow함수는 상위 스코프(lexical scope)을 가리키는 lexical this 이다
+        var bob = {
+            _name: 'BOB',
+            _friends: ["John", "Brian"],
+            printFriends() {
+                this._friends.forEach(f =>
+                    // 화살표 함수 내부에 있지만 바깥 스코프의 _name에 접근 가능
+                    console.log(this._name + ' knows ' + f));
+            }
+        }
+
+        // Template Literal : Not single quotition!!!! ````````` 1옆에 그거
+        let msg = `${bob._name} 은 ${bob._friends[0]} 이랑 친구야`;
+        console.log(msg);
+
+        // 파라미터 기본값 할당
+        function add(a, b = 3) {
+            return a + b;
+        }
+        console.log('default parameter: ', add(3)); //6
+
+        // 가변인자 --> 배열로 치환
+
+        function f(x, ...y) {
+            return x * y.length;
+        }
+        const arr2 = ['hello', 'json', 3, true]
+        console.log('single', f(3, arr2));
+    </script>
+</body>
+
+</html>

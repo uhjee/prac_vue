@@ -4,11 +4,6 @@
 <head>
   <title>Vue.js_report_01</title>
   <style>
-    #input-div {
-      margin: 50px;
-      padding: 10px;
-    }
-
     .input {
       border: 3px solid tomato;
       width: 80%;
@@ -26,6 +21,7 @@
       color: white;
       float: left;
       font-size: 12px;
+      cursor: pointer;
       /* transitioni : css 속성을 변경할 때 애니메이션 속도  */
       transition: 0.3s;
     }
@@ -36,7 +32,7 @@
     }
 
     .tbl-names {
-      border: 2px solid sandybrown;
+      border: 2px solid rgb(241, 145, 121);
       border-spacing: 0px;
       border-collapse: collapse;
       width: 100%;
@@ -56,30 +52,22 @@
       background-color: rgb(241, 145, 121);
       color: white;
     }
-
-    .even {
-      background-color: rgb(235, 216, 213);
-    }
-
-    #string-name-list {
-      margin: 20px;
-    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 
-<!-- 01.입력창 컴포넌트 시작 -->
+<!-- 01.입력창 template 시작 -->
 <template id="input-template">
-  <div id="input-div">
+  <div id="input-div" :style="{margin:'50px', padding: '10px'}">
     <!-- 이벤트 수식어 .stop 으로 div#input-div 로 전달되는 이벤트 버블링 차단 -->
     <input class="input" type="text" id="input-name" v-model="name" @keyup.enter.stop="addName"
-      placeholder="이름을 입력하세요.">
+      placeholder="이름을 입력하세요." />
     <button class="btn-add" @click="addName">추가</button>
   </div>
 </template>
-<!-- 01. 입력창 컴포넌트 끝 -->
+<!-- 01. 입력창 template 끝 -->
 
-<!-- 02. 리스트 컴포넌트 시작 -->
+<!-- 02. 리스트 template 시작 -->
 <template id="list-template">
   <div>
     <table class="tbl-names">
@@ -89,8 +77,9 @@
         </tr>
       </thead>
       <tbody id="name-list">
-        <!-- v-bind:class 를 통해 동적 class 할당. 0부터 시작하기 때문에 index +1  -->
-        <tr v-for="(person, index) in nameList" :key="index" :class="{even: (index+1)%2 === 0 }">
+        <!-- v-bind:style 를 통해 CSS 동적 할당. computed로 하려 했으나 파라미터 사용이 되지 않아, methods에 구현  -->
+        <!-- <tr v-for="(person, index) in nameList" :key="index" :class="{even: (index+1)%2 === 0 }"> -->
+        <tr v-for="(person, index) in nameList" :key="index" :style="{backgroundColor: getEvenColor(index)}">
           <td>
             {{person.name}}
           </td>
@@ -98,12 +87,13 @@
       </tbody>
     </table>
     <!-- computed 속성을 사용하여 toString -->
-    <div id="string-name-list">
+    <!-- v-bind:style 을 사용하여 인라인 스타일 적용 -->
+    <div id="string-name-list" :style="{margin: '20px'}">
       {{stringNameList}}
     </div>
   </div>
 </template>
-<!-- 02. 리스트 컴포넌트 끝 -->
+<!-- 02. 리스트 template 끝 -->
 
 <!-- HTML body -->
 
@@ -117,87 +107,93 @@
   </div>
 
   <script type="text/javascript">
-    // 컴포넌트간 데이터 전송을 위한 이벤트 버스 Vue Instance 생성 
-    var eventBus = new Vue();
+    // 컴포넌트간 데이터 전송을 위한 이벤트 버스 Vue Instance 생성
+    let eventBus = new Vue();
 
     // 01. input-component  Vue instance에 전역 component로 등록
-    Vue.component('input-component', {
-      template: '#input-template',
+    Vue.component("input-component", {
+      template: "#input-template",
       data() {
         return {
-          name: ""
-        }
+          name: "",
+        };
       },
       methods: {
         addName: function () {
           // 다른 컴포넌트로 $emit() 메소드의 parameter로 data 전달
-          eventBus.$emit('add-name', this.name);
-          this.name = '';
-        }
-      }
-    })
+          eventBus.$emit("add-name", this.name);
+          this.name = "";
+        },
+      },
+    });
 
     // 02. list-component  Vue instance에 전역 component로 등록
-    Vue.component('list-component', {
-      template: '#list-template',
+    Vue.component("list-component", {
+      template: "#list-template",
       // 컴포넌트의 created 훅을 사용하여 핸들러 등록
       created: function () {
         // 이벤트버스 인스턴스에 바인딩하여, 이벤트 수신 대기
-        eventBus.$on('add-name', this.addName);
+        eventBus.$on("add-name", this.addName);
       },
       data() {
         return {
           nameList: [{
-              name: "가나다"
+              name: "가나다",
             },
             {
-              name: "라마바"
+              name: "라마바",
             },
             {
-              name: "홍길동"
+              name: "홍길동",
             },
             {
-              name: "이순신"
+              name: "이순신",
             },
             {
-              name: "강감찬"
+              name: "강감찬",
             },
-
-          ]
-        }
+          ],
+        };
       },
       methods: {
-        addName: function (name) {
+        addName(name) {
           // 유효성 체크
-          if (name === '' || name == null) {
-            alert('이름을 입력해주세요.')
+          if (name === "" || name == null) {
+            alert("이름을 입력해주세요.");
             return;
           }
 
           this.nameList.push({
-            name: name
-          })
-        }
+            name: name,
+          });
+        },
+        getEvenColor(index) {
+          // 홀수면 리턴
+          if ((index + 1) % 2 !== 0) {
+            return;
+          }
+          return 'rgb(235, 216, 213)';
+        },
       },
       computed: {
-        stringNameList: function () {
-          let stringNames = '';
+        stringNameList() {
+          let stringNames = "";
 
           for (let i = 0; i < this.nameList.length; i++) {
             stringNames += this.nameList[i].name;
             if (i !== this.nameList.length - 1) {
-              stringNames += ' / '
+              stringNames += " / ";
             }
           }
           return stringNames;
-        }
+        },
       },
-    })
+    });
 
     // main Vue Instance 생성
-    var app = new Vue({
-      el: '#app',
-    })
+    let app = new Vue({
+      el: "#app",
+    });
   </script>
 </body>
 

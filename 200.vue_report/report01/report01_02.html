@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Vue.js_report_02</title>
+  <style>
+    .input-form {
+      width: 13%;
+    }
+
+    .span-input {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .btn-add {
+      background-color: rgb(219, 106, 94);
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-add:hover {
+      background-color: whitesmoke;
+      color: tomato;
+    }
+
+    .tbl-employees {
+      border: 2px solid salmon;
+      border-spacing: 0px;
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border: 1px solid salmon;
+      padding: 10px 20px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    th {
+      /* border: 1px solid white; */
+      background-color: rgb(241, 145, 121);
+      color: white;
+      font-size: 15px;
+    }
+
+    .newdata {
+      background-color: rgb(245, 229, 215);
+    }
+
+    .span-newdata {
+      color: rgb(233, 142, 23);
+      font-size: 10px;
+      margin-right: 20px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<!-- 01. input-template 작성 -->
+<template id="input-template">
+  <div>
+    <span class="span-input">
+      <label for="input-name">* 이 름</label>
+      <input type="text" id="input-name" class="input-form" v-model="employee.name" placeholder="ex) 홍길동" />
+    </span>
+    <span class="span-input">
+      <label for="input-dep">* 부 서</label>
+      <input type="text" id="input-dep" class="input-form" v-model="employee.dep" placeholder="ex) 개발" />
+    </span>
+    <span class="span-input">
+      <label for="input-rank">* 직 급</label>
+      <input type="text" id="input-rank" class="input-form" v-model="employee.rank" placeholder="ex) 사원" />
+    </span>
+    <span class="span-input">
+      <label for="input-tel">* 연락처</label>
+      <input type="text" id="input-tel" class="input-form" v-model="employee.tel" @keyup.enter="addEmployee"
+        placeholder="ex) 010-1111-1111" />
+    </span>
+    <button class="btn-add" @click="addEmployee">추가</button>
+  </div>
+</template>
+<!-- 01. input-template 끝 -->
+
+<!-- 02. list-template 작성 -->
+<template id="list-template">
+  <div>
+    <table class="tbl-employees">
+      <thead>
+        <tr>
+          <th>이 름</th>
+          <th>부 서</th>
+          <th>직 급</th>
+          <th>연락처</th>
+        </tr>
+      </thead>
+      <tbody id="employee-list">
+        <!-- v-bind:class와 데이터의 value를 통해 동적 class 할당 -->
+        <tr v-for="(employee, index) in employeeList" :key="index" :class="{ newdata : employee.isNew}">
+          <td>
+            <span class="span-newdata" v-if="employee.isNew">new</span>
+            {{employee.name}}
+          </td>
+          <td>{{employee.dep}}</td>
+          <td>{{employee.rank}}</td>
+          <td>{{employee.tel}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+<!-- 02. list-template 끝 -->
+
+<!-- HTML body -->
+
+<body>
+  <div id="app">
+    <div id="header" class="header">
+      <h2>report02: Employee List</h2>
+      <input-component></input-component>
+    </div>
+    <list-component></list-component>
+  </div>
+
+  <script type="text/javascript">
+    // 컴포넌트 간 데이터 교환을 위한 이벤트버스 Instance 생성
+    let eventBus = new Vue();
+
+    // 01. input-component Global component로 등록 후 instance 세팅
+    Vue.component("input-component", {
+      template: "#input-template",
+      data() {
+        return {
+          employee: {
+            name: "",
+            dep: "",
+            rank: "",
+            tel: "",
+          },
+        };
+      },
+      methods: {
+        addEmployee($event) {
+          // 유효성 체크
+          if (
+            this.employee.name === null ||
+            this.employee.name === "" ||
+            this.employee.dep === null ||
+            this.employee.dep === "" ||
+            this.employee.rank === null ||
+            this.employee.rank === "" ||
+            this.employee.tel === null ||
+            this.employee.tel === ""
+          ) {
+            alert("정보를 다시 확인해주세요.");
+            return;
+          }
+
+          // $emit() 메소드로 다른 컴포넌트의 add-employee 메소드 호출, 동시에 parameter로 데이터 전송
+          eventBus.$emit("add-employee", this.employee);
+
+          this.employee.name = "";
+          this.employee.dep = "";
+          this.employee.rank = "";
+          this.employee.tel = "";
+
+          // 키보드로 enter 쳐서 이벤트 발생한 경우, 포커스 잃도록 blur 처리
+          if ($event.type === "keyup") {
+            $event.target.blur();
+          }
+        },
+      },
+    });
+
+    // 02. list-component Global component로 등록 후 instance 세팅
+    Vue.component("list-component", {
+      template: "#list-template",
+      // vue instance의 라이프 싸이클 created 훅을 이용해 이벤트리스너 등록
+      created: function () {
+        eventBus.$on("add-employee", this.addEmployee);
+      },
+      data() {
+        return {
+          employeeList: [{
+              name: "가나다",
+              dep: "개발",
+              rank: "대리",
+              tel: "010-5555-4444",
+              isNew: false,
+            },
+            {
+              name: "라마바",
+              dep: "경영지원",
+              rank: "사원",
+              tel: "010-5775-4428",
+              isNew: false,
+            },
+            {
+              name: "홍길동",
+              dep: "영업",
+              rank: "과장",
+              tel: "010-5888-4435",
+              isNew: false,
+            },
+            {
+              name: "이순신",
+              dep: "컨설팅",
+              rank: "차장",
+              tel: "010-8888-8888",
+              isNew: false,
+            },
+            {
+              name: "이길동",
+              dep: "기술지원",
+              rank: "사원",
+              tel: "010-6666-7777",
+              inNew: false,
+            },
+          ],
+        };
+      },
+      methods: {
+        // 이벤트 버스를 통해 전달받은 input 컴포넌트의 데이터
+        addEmployee(employee) {
+          this.employeeList.push({
+            name: employee.name,
+            dep: employee.dep,
+            rank: employee.rank,
+            tel: employee.tel,
+            isNew: true,
+          });
+        },
+      },
+      computed: {
+        isNew() {
+          return true;
+        },
+      },
+    });
+
+    // main Vue Instance 생성
+    let app = new Vue({
+      el: "#app",
+    });
+  </script>
+</body>
+
+</html>
