@@ -3,11 +3,42 @@
 
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>report02_02_허지행</title>
+    <style>
+        div {
+            margin: 10px;
+        }
+
+        span {
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
+    <div>
+        <div>
+            <span>- 배 열: </span>
+            <span id="arr"></span>
+        </div>
+        <div>
+            <span>- 합 계: </span>
+            <span id="sum"></span>
+        </div>
+        <div>
+            <span>- 평 균: </span>
+            <span id="avg"></span>
+        </div>
+        <div>
+            <span>- 곱한 값(인자중 0 포함): </span>
+            <span id="multiInZero"></span>
+        </div>
+        <div>
+            <span>- 곱한 값(인자 중 0 미포함): </span>
+            <span id="multiOutZero"></span>
+        </div>
 
+    </div>
 
     <script type="text/javascript">
         // 00. n을 파라미터로 0 부터 10 까지의 난수 n개를 담은 배열을 만드는 함수
@@ -53,6 +84,13 @@
         console.log('평균: ', average(arr));
         console.log('곱한 값(인자 중 0 포함):', multiply(arr, true));
         console.log('곱한 값(인자 중 0 미포함):', multiply(arr, false));
+
+        // 05. html body에 넣기
+        document.getElementById('arr').innerText = `[${arr}]`;
+        document.getElementById('sum').innerText = `${sum(arr)}`;
+        document.getElementById('avg').innerText = `${average(arr)}`;
+        document.getElementById('multiInZero').innerText = `${multiply(arr, true)}`;
+        document.getElementById('multiOutZero').innerText = `${multiply(arr, false)}`;
     </script>
 </body>
 
