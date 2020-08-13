@@ -1,10 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-// import App from './App'
+import App from './App'
 
 // 저수준 axios 예제
-import App from './AppAxiosTest'
+// import App from './AppAxiosTest'
 
 // axios를 모든 Vue 인스턴스 내부에서 직접 import 하지 않아도 this.$axios를 통해 사용할 수 있다
 // this.$axios.get() 같은 식으로 사용 가능

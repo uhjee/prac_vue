@@ -1,12 +1,10 @@
 <template>
   <!-- // 필요데이터 : currentView: 동적 컴포넌트로 보여줄 컴포넌트 지정 자식
 // 컴포넌트들이필요로 하는 데이터를 data 옵션을 이용해 중앙집중화 하여 관리 및
-// props를 이용하여 자식 컴포넌트에게 뿌리기 -->
+  // props를 이용하여 자식 컴포넌트에게 뿌리기-->
   <div id="container">
     <div class="page-header">
-      <h1 class="test-center">
-        연락처 관리 App
-      </h1>
+      <h1 class="test-center">연락처 관리 App</h1>
       <p>(Dynamic Component + EventBus + Axios)</p>
     </div>
     <!-- v-binding 으로 props (contact) 전달 -->
@@ -24,8 +22,7 @@
       :next-text="'다음'"
       :container-class="'pagination'"
       :page-class="'page-item'"
-    >
-    </paginate>
+    ></paginate>
   </div>
 </template>
 
@@ -38,7 +35,7 @@ import UpdateContact from "./components/UpdateContact";
 import UpdatePhoto from "./components/UpdatePhoto";
 
 import CONF from "./Config";
-import eventBus from "./EventBus";
+import eventBus from "./EventBus.js";
 import Paginate from "vuejs-paginate";
 
 export default {
@@ -127,7 +124,7 @@ export default {
           }
         })
         .then(response => {
-          this.contaclist = response.data;
+          this.contactlist = response.data;
         })
         .catch(ex => {
           console.log(`fetchContacts failed ${ex}`);
@@ -149,6 +146,7 @@ export default {
       this.$axios
         .put(CONF.UPDATE.replace("${no}", contact.no), contact)
         .then(response => {
+          // 새로 화면 렌더링
           this.fetchContacts();
         })
         .catch(ex => {
