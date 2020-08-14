@@ -5,7 +5,13 @@
       <!-- form 메소드와 data의 인코딩 타입 설정 -->
       <form method="post" enctype="multipart/form-data">
         <h3 class="heading">:: 사진 변경</h3>
-        <input type="hidden" name="no" class="long" disabled v-model="contact.no" />
+        <input
+          type="hidden"
+          name="no"
+          class="long"
+          disabled
+          v-model="contact.no"
+        />
         <div>
           <label for>현재사진</label>
           <img class="thumb" :src="contact.photo" alt />
@@ -14,13 +20,28 @@
           <label for>사진 파일 선택</label>
           <label for>
             <!-- ref 속성을 이용해 직접 참조 -->
-            <input type="file" ref="photofile" name="photo" class="long btn btn-default" />
+            <input
+              type="file"
+              ref="photofile"
+              name="photo"
+              class="long btn btn-default"
+            />
           </label>
         </div>
         <div>
           <div>&nbsp;</div>
-          <input type="button" class="btn btn-primary" value="변 경" @click="photoSubmit" />
-          <input type="button" class="btn btn-danger" value="취 소" @click="cancelEvent" />
+          <input
+            type="button"
+            class="btn btn-primary"
+            value="변 경"
+            @click="photoSubmit"
+          />
+          <input
+            type="button"
+            class="btn btn-danger"
+            value="취 소"
+            @click="cancelEvent"
+          />
         </div>
       </form>
     </div>
@@ -28,22 +49,32 @@
 </template>
 
 <script>
-import eventBus from "../EventBus";
+// import eventBus from "../EventBus";
+import Constant from "../constant";
+import { mapState } from "vuex";
 
 export default {
   name: "updatePhoto",
-  props: ["contact"],
+  computed: mapState({
+    contact: "contact"
+  }),
+  // props: ["contact"],
   methods: {
     cancelEvent() {
-      eventBus.$emit("cancel");
+      // eventBus.$emit("cancel");
+      this.$store.dispatch(Constant.CANCEL_FORM);
     },
     photoSubmit() {
       // console.log(this.$refs.photofile);
       let file = this.$refs.photofile.files[0];
       // this.contact.photo = file;
-      eventBus.$emit("updatePhoto", this.contact.no, file);
-    },
-  },
+      // eventBus.$emit("updatePhoto", this.contact.no, file);
+      this.$store.dispatch(Constant.UPDATE_PHOTO, {
+        no: this.contact.no,
+        file: file
+      });
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,6 @@
 // 상수 정의
 export default {
-  FETCH_CONTACTS: "fetchContacts", //연락처 조회
+  FETCH_CONTACTS: "fetchContact", //연락처 조회
   ADD_CONTACT_FORM: "addContactForm", //입력폼 나타내기
   ADD_CONTACT: "addContact", //연락처 추가
   EDIT_CONTACT_FORM: "editContactForm", //수정폼 나타내기

@@ -67,7 +67,7 @@ export default {
       pageno = payload.pageno;
     var pagesize = store.state.contactlist.pagesize;
 
-    contactAPI.fetchContacts(pageno, pagesize)
+    contactAPI.fetchContact(pageno, pagesize)
       .then((response) => {
         store.commit(Constant.FETCH_CONTACTS, {
           contactlist: response.data

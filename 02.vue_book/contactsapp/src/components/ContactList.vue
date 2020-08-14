@@ -35,30 +35,56 @@
 </template>
 
 <script>
-import eventBus from "../EventBus";
+// import eventBus from "../EventBus";
+import Constant from "../constant";
+import { mapState } from "vuex";
 
 export default {
   name: "contactList",
+  // refactoring 전...... ----------------------------------------------
   //   자신이 데이터를 갖지 않고, 상위 컴포넌트로부터 전달받아 화면에 나타내기만 한다
   // 상태가 없는 컴포넌트(Stateless componenet)라 한다
-  props: ["contactlist"],
+  // props: ["contactlist"],
   //   evnet 등록.. eventBus객체를 통해 App.vue에서 $on 으로 이벤트 핸들링
+
+  // 이벤트 버스에서는 props으로 받아왔지만, 이제는 store에 직접 접근해서 가져온다.
+  // 가공없이 순수한 getter역할을 하는 computed 내부 mapState
+  computed: mapState({
+    contactlist: "contactlist",
+  }),
+
+  // refactoring 전...... ----------------------------------------------
+  // methods: {
+  //   addContact() {
+  //     // 새연락처 추가 btn 클릭시 입력 폼을 나타내기 위한 이벤트
+  //     eventBus.$emit("addContactForm");
+  //   },
+  //   editContact(no) {
+  //     // 조회하는 리스트 중 편집 버튼을 클릭했을 때 해당 연락처의 no를 가지고 수정 폼으로 가는 이벤트
+  //     eventBus.$emit("editContactForm", no);
+  //   },
+  //   deleteContact(no) {
+  //     if (confirm("정말로 삭제할거에요?") == true) {
+  //       eventBus.$emit("deleteContact", no);
+  //     }
+  //   },
+  //   editPhoto(no) {
+  //     eventBus.$emit("editPhoto", no);
+  //   },
+  // },
   methods: {
+    // Action of store 호출...
     addContact() {
-      // 새연락처 추가 btn 클릭시 입력 폼을 나타내기 위한 이벤트
-      eventBus.$emit("addContactForm");
+      this.$store.dispatch(Constant.ADD_CONTACT_FORM);
     },
     editContact(no) {
-      // 조회하는 리스트 중 편집 버튼을 클릭했을 때 해당 연락처의 no를 가지고 수정 폼으로 가는 이벤트
-      eventBus.$emit("editContactForm", no);
+      this.$store.dispatch(Constant.EDIT_CONTACT_FORM, { no: no });
     },
     deleteContact(no) {
-      if (confirm("정말로 삭제할거에요?") == true) {
-        eventBus.$emit("deleteContact", no);
-      }
+      this.$store.dispatch(Constant.DELETE_CONTACT, { no: no });
     },
     editPhoto(no) {
-      eventBus.$emit("editPhoto", no);
+      this.$store.dispatch(Constant.EDIT_PHOTO_FORM, { no: no });
     },
   },
 };

@@ -46,50 +46,87 @@
 </template>
 
 <script>
-import eventBus from "../EventBus";
+// import eventBus from "../EventBus";
+
+import Constant from "../constant";
+import { mapState } from "vuex";
+import _ from "lodash";
 
 export default {
   name: "contactForm",
-  // props 배열식이 아닌 객체형으로 선언 가능
-  props: {
-    //   동적으로 화면을 구성하기 위한 옵션값
-    // 객체형일 경우 type과 default값 설정 가능
-    mode: { type: String, default: "add" },
-    contact: {
-      type: Object,
-      //   아래처럼 default값을 함수의 return값으로 설정 가능
-      // javascript에서는 함수도 객체이기 때문에 문제 없다
-      default() {
-        return { no: "", name: "", tel: "", address: "", photo: "" };
-      },
-    },
-  },
+
+  // refactoring 전...... ----------------------------------------------
+  // // props 배열식이 아닌 객체형으로 선언 가능
+  // props: {
+  //   //   동적으로 화면을 구성하기 위한 옵션값
+  //   // 객체형일 경우 type과 default값 설정 가능
+  //   mode: { type: String, default: "add" },
+  //   contact: {
+  //     type: Object,
+  //     //   아래처럼 default값을 함수의 return값으로 설정 가능
+  //     // javascript에서는 함수도 객체이기 때문에 문제 없다
+  //     default() {
+  //       return { no: "", name: "", tel: "", address: "", photo: "" };
+  //     },
+  //   },
+  // },
   mounted() {
     //   DOM 객체에 직접참조하여 DOM API 사용
     this.$refs.name.focus();
   },
+  // refactoring 전...... ----------------------------------------------
   //   mode값에 따라서 다른 값이 출력될 것들을 위해 computed 속성 활용
-  computed: {
-    btnText: function () {
-      if (this.mode != "update") return "추 가";
-      else return "수 정";
+  // computed: {
+  //   btnText: function () {
+  //     if (this.mode != "update") return "추 가";
+  //     else return "수 정";
+  //   },
+  //   headingText: function () {
+  //     if (this.mode != "update") return "새 연락처 추가";
+  //     else return "연락처 변경";
+  //   },
+  // },
+  computed: _.extend(
+    {
+      btnText() {
+        if (this.mode != "update") {
+          return "추가";
+        } else return "수정";
+      },
+      headingText() {
+        if (this.mode != "update") return "새 연락처 추가";
+        else return "연락처 변경";
+      },
     },
-    headingText: function () {
-      if (this.mode != "update") return "새 연락처 추가";
-      else return "연락처 변경";
-    },
-  },
+    mapState({
+      mode: "mode",
+      contact: "contact",
+    })
+  ),
+  // refactoring 전...... ----------------------------------------------
+  // methods: {
+  //   //   submit 이벤트 동적 할당
+  //   submitEvent() {
+  //     if (this.mode == "update") {
+  //       eventBus.$emit("updateSubmit", this.contact);
+  //     } else {
+  //       eventBus.$emit("addSubmit", this.contact);
+  //     }
+  //   },
+  //   cancelEvent() {
+  //     eventBus.$emit("cancel");
+  //   },
+  // },
   methods: {
-    //   submit 이벤트 동적 할당
     submitEvent() {
       if (this.mode == "update") {
-        eventBus.$emit("updateSubmit", this.contact);
+        this.$store.dispatch(Constant.UPDATE_CONTACT);
       } else {
-        eventBus.$emit("addSubmit", this.contact);
+        this.$store.dispatch(Constant.ADD_CONTACT);
       }
     },
     cancelEvent() {
-      eventBus.$emit("cancel");
+      this.$store.dispatch(Constant.CANCEL_FORM);
     },
   },
 };
