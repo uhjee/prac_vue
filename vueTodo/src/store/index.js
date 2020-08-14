@@ -28,7 +28,7 @@ const store = new Vuex.Store({
       },
       {
         no: 3,
-        text: '운동하기',
+        text: '누워있기',
         registAt: '2020.07.26',
         isDone: false
       },
@@ -47,7 +47,7 @@ const store = new Vuex.Store({
       {
         no: 6,
         text: '학자금 대출 갚기',
-        registAt: '2020.08.14',
+        registAt: '2020.08.09',
         isDone: false
       }
 
@@ -65,22 +65,76 @@ const store = new Vuex.Store({
       state.todoList.push(inputTodo);
 
       //   왜 있는지 모르겠다 
-      //   state.mode = 'add';
-      // state.currentView = 'contactForm';
+      //   알겠다.. 끝나고 모달창 끄는 역할.
+      state.mode = 'add';
+      state.currentView = null;
     },
     updateTodo: (state, payload) => {
       state.todo = payload.todo;
+      state.todoList[state.todo.no - 1].text = state.todo.text;
 
       //   왜 있는지 모르겠다 
-      //   state.mode = 'update';
-      // state.currentView = 'contactForm';
+      //   알겠다.. 끝나고 모달창 끄는 역할.
+      state.mode = 'add';
+      state.currentView = null;
+    },
+    changeView: (state, payload) => {
+      state.currentView = 'todoForm';
+      state.mode = payload.mode;
+    },
+    cancelView: state => {
+      state.currentView = null;
+      state.mode = '';
+
+    },
+    getTodo: (state, payload) => {
+      state.todo = state.todoList[payload.no - 1];
+    },
+    deleteTodo: (state, payload) => {
+      console.log(payload);
+      state.todoList.filter(t => {
+        if (t.no != payload.no) {
+          return;
+        }
+        return t.in
+      })
+      state.todoList.splice(payload.no, 1);
     }
   },
   actions: {
     addTodo: (store, payload) => {
-      console.log('AddTodo action');
-      console.log('AddTodo action payload: ' + payload);
-      store.commit(addTodo, payload);
+      if (payload.text.length < 2) {
+        alert('2글자 이상 입력해주세요.')
+        return;
+      }
+      store.commit('addTodo', payload);
+    },
+    updateTodo: (store, payload) => {
+      if (payload.todo.text.length < 2) {
+        alert('2글자 이상 입력해주세요.')
+        return;
+      }
+      store.commit('updateTodo', payload);
+    },
+    changeView: (store, payload) => {
+      store.commit('changeView', payload);
+    },
+    cancelView: store => {
+      store.commit('cancelView');
+    },
+    updateForm: (store, payload) => {
+      store.commit('getTodo', payload);
+      store.commit('changeView', payload);
+    },
+    deleteTodo: (store, payload) => {
+      store.commit('deleteTodo', payload);
+    }
+  },
+  getters: {
+    copyTodo: state => {
+      const a = Object.assign({}, state.todo);
+      return a;
+      //   return JSON.parse(JSON.stringify(state.todo));
     }
   }
 })
