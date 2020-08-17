@@ -30,7 +30,7 @@ const store = new Vuex.Store({
         no: 3,
         text: '누워있기',
         registAt: '2020.07.26',
-        isDone: false
+        isDone: true
       },
       {
         no: 4,
@@ -42,7 +42,7 @@ const store = new Vuex.Store({
         no: 5,
         text: '비타민 사기',
         registAt: '2020.08.05',
-        isDone: false
+        isDone: true
       },
       {
         no: 6,
@@ -88,17 +88,25 @@ const store = new Vuex.Store({
 
     },
     getTodo: (state, payload) => {
-      state.todo = state.todoList[payload.no - 1];
+      // Arrays.findIndex() 매칭되는 index를 리턴한다.
+      let matchIndex = state.todoList.findIndex(todo =>
+        todo.no == payload.no
+      )
+      state.todo = state.todoList[matchIndex];
     },
     deleteTodo: (state, payload) => {
-      console.log(payload);
-      state.todoList.filter(t => {
-        if (t.no != payload.no) {
-          return;
-        }
-        return t.in
-      })
-      state.todoList.splice(payload.no, 1);
+      console.log(payload.no);
+      let matchIndex = state.todoList.findIndex(todo =>
+        todo.no == payload.no
+      )
+      console.log(matchIndex);
+      state.todoList.splice(matchIndex, 1);
+    },
+    changeChecked: (state, payload) => {
+      let matchIndex = state.todoList.findIndex(todo =>
+        todo.no == payload.no
+      )
+      state.todoList[matchIndex].isDone = !state.todoList[matchIndex].isDone;
     }
   },
   actions: {
@@ -116,7 +124,7 @@ const store = new Vuex.Store({
       }
       store.commit('updateTodo', payload);
     },
-    changeView: (store, payload) => {
+    addForm: (store, payload) => {
       store.commit('changeView', payload);
     },
     cancelView: store => {
@@ -128,13 +136,22 @@ const store = new Vuex.Store({
     },
     deleteTodo: (store, payload) => {
       store.commit('deleteTodo', payload);
+    },
+    changeChecked: (store, payload) => {
+      store.commit('changeChecked', payload);
     }
   },
   getters: {
     copyTodo: state => {
-      const a = Object.assign({}, state.todo);
-      return a;
+      // vanilla javascript로 객체 복사하는 방법
+      // lodash의 clone method도 있다
+      const todo = Object.assign({}, state.todo);
+      console.log(todo);
+      return todo;
       //   return JSON.parse(JSON.stringify(state.todo));
+    },
+    todoList: state => {
+      return state.todoList.filter(todo => todo.isDone === false)
     }
   }
 })

@@ -55,6 +55,7 @@
 
         // Template Literal : Not single quotition!!!! ````````` 1옆에 그거
         let msg = `${bob._name} 은 ${bob._friends[0]} 이랑 친구야`;
+
         console.log(msg);
 
         // 파라미터 기본값 할당
@@ -70,6 +71,22 @@
         }
         const arr2 = ['hello', 'json', 3, true]
         console.log('single', f(3, arr2));
+
+        const squares = [1, 2, 3];
+
+        (function (inputArr) {
+            arr = [];
+            for (item of inputArr) {
+                arr.push(item + 1);
+            }
+            return arr;
+        })()
+
+        squares.map((item) => {
+            return item + 1;
+        })
+
+        squares.map((item) => item + 1)
     </script>
 </body>
 

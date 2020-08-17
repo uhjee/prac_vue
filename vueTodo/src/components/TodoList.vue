@@ -1,9 +1,7 @@
 <template>
   <div>
     <p class="addNew">
-      <button class="btn btn-success btn-add float-right" @click="addForm">
-        할 일 추가
-      </button>
+      <button class="btn btn-success btn-add float-right" @click="addForm">할 일 추가</button>
     </p>
     <div id="example">
       <table id="list" class="table table-striped table-bordered table-hover">
@@ -17,19 +15,13 @@
         <tbody id="todos">
           <tr v-for="(todo, index) in todoList" :key="index">
             <td>
-              <input type="checkbox" name="" />
+              <input type="checkbox" @change="changeChecked(todo.no)" ref="check" />
               {{ todo.isDone }}
             </td>
             <td class="todo-text">
-              <span>
-                {{ todo.text }}
-              </span>
-              <button class="btn btn-xs" @click="updateForm(todo.no)">
-                수정
-              </button>
-              <button class="btn btn-xs" @click="deleteTodo(todo.no)">
-                삭제
-              </button>
+              <span>{{ todo.text }}</span>
+              <button class="btn btn-xs" @click="updateForm(todo.no)">수정</button>
+              <button class="btn btn-xs" @click="deleteTodo(todo.no)">삭제</button>
             </td>
             <td>{{ todo.registAt }}</td>
           </tr>
@@ -41,29 +33,48 @@
 
 <script>
 import _ from "lodash";
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "todolist",
-  computed: mapState({
-    todoList: "todoList"
-  }),
+  computed: _.extend(
+    // mapState({
+    //   todoList: "todoList",
+    // }),
+    mapGetters({
+      todoList: "todoList",
+    })
+  ),
   methods: {
     addForm() {
-      //   console.log(a);
-      this.$store.dispatch("changeView", { mode: "add" });
+      this.$store.dispatch("addForm", { mode: "add" });
     },
     updateForm(no) {
       this.$store.dispatch("updateForm", {
         mode: "update",
-        no: no
+        no: no,
       });
     },
+    // 수정 필요..
     deleteTodo(index) {
-      this.$store.dispatch("deleteTodo", { no: index - 1 });
-    }
-  }
+      this.$store.dispatch("deleteTodo", { no: index });
+    },
+    changeChecked(no) {
+      this.$store.dispatch("changeChecked", { no: no });
+      console.log(this.$refs.check);
+      if (this.$refs.check.length > 0) {
+        this.$refs.check.forEach((element) => {
+          element.checked = false;
+        });
+      }
+      // this.$refs.check[no].checked = false;
+    },
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+th {
+  text-align: center;
+}
+</style>

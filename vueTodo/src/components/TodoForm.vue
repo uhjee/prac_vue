@@ -4,9 +4,7 @@
       <h3 class="heading">{{ headingText }}</h3>
       <div class="form-group">
         <label>To do</label>
-        <div id="regist-date" v-if="this.mode == 'update'">
-          {{ copyTodo.registAt }}에 작성된 할 일
-        </div>
+        <div id="regist-date" v-if="this.mode == 'update'">{{ copyTodo.registAt }}에 작성된 할 일</div>
         <input
           v-if="this.mode == 'add'"
           type="text"
@@ -24,12 +22,7 @@
         />
       </div>
       <div class="form-group">
-        <input
-          type="button"
-          class="btn"
-          :value="btnText"
-          @click="submitEvent"
-        />
+        <input type="button" class="btn" :value="btnText" @click="submitEvent" />
       </div>
     </div>
   </div>
