@@ -7,8 +7,10 @@
       <div class="box" v-for="c in contacts" :key="c.no">
         <!-- contacts/:no 형태로 URI 경로 요청 -->
         <!-- <router-link :to="'/contacts/' + c.no">{{c.name}}</router-link> -->
-        <!-- named route 이용 -->
-        <router-link :to="{name: 'contactbyno', params:{no: c.no}}">{{c.name}}</router-link>
+        <!-- named route 이용한 선언적 네비게이션-->
+        <!-- <router-link :to="{name: 'contactbyno', params:{no: c.no}}">{{c.name}}</router-link> -->
+
+        <span @click="navigate(c.no)" style="cursor:pointer">[{{c.name}}]</span>
       </div>
     </div>
     <!-- App.vue에 chilren 등록한 경우, 해당 요청에 해당하면 자식 라우트 표현 -->
@@ -25,10 +27,25 @@ export default {
       contacts: contactlist.contacts,
     };
   },
+  methods: {
+    navigate(no) {
+      if (confirm("상세 정보를 보시겠어요?")) {
+        // router 객체의 push 메소드
+        // push(이동하려는 경로..(명명된 라우트로 파라미터를 넣어 객체형으로 명시.) , 성공했을 때 콜백 함수)
+        this.$router.push(
+          // 이동하기 위한 경로, 객체형으로 명시
+          { name: "contactbyno", params: { no: no } },
+          // 성공했을 때의 콜백
+          function () {
+            console.log(`/contacts/${no} 로 이동완료!`);
+          }
+        );
+      }
+    },
+  },
 };
 </script>
 
-</script>
 <style>
 .wrapper {
   background-color: #fff;

@@ -8,15 +8,15 @@
             <!--하이퍼링크 생성 :: script의 routes의 path와 링크 연결-->
             <!-- <router-link to="/home">Home</router-link> -->
             <!-- 하이퍼링크 생성 :: routes 에 등록한 name 으로 .. -->
-            <router-link to="{name: 'home'}">Home</router-link>
+            <router-link v-bind:to="{name:'home'}">Home</router-link>
           </li>
           <li>
             <!-- <router-link to="/about">About</router-link> -->
-            <router-link to="{name: 'about'}">About</router-link>
+            <router-link v-bind:to="{name:'about'}">About</router-link>
           </li>
           <li>
             <!-- <router-link to="/contacts">contacts</router-link> -->
-            <router-link to="{name: 'contacts'}">contacts</router-link>
+            <router-link v-bind:to="{name:'contacts'}">contacts</router-link>
           </li>
         </ul>
       </nav>
@@ -39,7 +39,11 @@ import ContactByNo from "./components/ContactByNo";
 // VueRouter 참조하기 위해 import
 import VueRouter from "vue-router";
 
+// routing Mode가 history 일 때, 잘못된 경로 핸들링
+import NotFound from "./components/NotFound";
+
 const router = new VueRouter({
+  mode: "history",
   // path와 실제 컴포넌트 간 매핑
   routes: [
     { path: "/", component: Home },
@@ -55,10 +59,41 @@ const router = new VueRouter({
       component: Contacts,
       // 하나의 컴포넌트 내부에 포함되어 라우팅할 경우, (중첩 라우팅) 위의 컴포넌트 계속 뿌린다.
       children: [
-        { path: "/contacts/:no", name: "contactbyno", component: ContactByNo },
+        // {
+        //   path: "/contacts/:no",
+        //   name: "contactbyno",
+        //   component: ContactByNo,
+        //   // 라우트 수준의 네비게이션 보호
+        //   beforeEnter: (to, from, next) => {
+        //     console.log(`@@ beforeEnter! : ${from.path} --> ${to.path}`);
+        //     if (from.path.startsWith("/contacts")) {
+        //       next();
+        //     } else {
+        //       next("/home");
+        //     }
+        //     // next() 를 호출하지 않으면 네비게이션 진행이 되지 않는다.
+        //   },
+        // },
+        {
+          path: ":no",
+          name: "contactbyno",
+          component: ContactByNo,
+          // props true인 경우, route.params 정보를 동일한 속성에 할당
+          props: true,
+        },
       ],
     },
+    { path: "*", component: NotFound },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  console.log(`** beforeEach!!`);
+  next();
+});
+
+router.afterEach((to, from) => {
+  console.log(`** afterEach!!`);
 });
 
 export default {

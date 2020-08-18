@@ -33,23 +33,31 @@ export default {
   name: "contactbyno",
   data() {
     return {
-      no: 0,
+      // no: 0,
       contacts: contactlist.contacts,
     };
   },
   //   호출될 때마다 Vue Instance 생성..
-  created() {
-    //   /contacts/:no 의 :no 위치의 문자열 값 획득 및 데이터에 할당
-    //    /users?keyword=test 와 같은 쿼리스트링으로 요청할 경우 query 객체 이용
-    // ==>  this.$route.query.[keyword] 와 같이 코드 작성
-    this.no = this.$route.params.no;
-  },
-  watch: {
-    //   to: 현재의 라우트 객체 / from: 이전의 라우트 객체
-    $route: function (to, from) {
-      this.no = to.params.no;
-    },
-  },
+  // created() {
+  //   //   /contacts/:no 의 :no 위치의 문자열 값 획득 및 데이터에 할당
+  //   //    /users?keyword=test 와 같은 쿼리스트링으로 요청할 경우 query 객체 이용
+  //   // ==>  this.$route.query.[keyword] 와 같이 코드 작성
+  //   this.no = this.$route.params.no;
+  // },
+  // watch: {
+  //   //   to: 현재의 라우트 객체 / from: 이전의 라우트 객체
+  //   $route: function (to, from) {
+  //     this.no = to.params.no;
+  //   },
+  // },
+  // 라우트 정보가 변경될 때만 호출, 처음 컴포넌트가 생성될 때는 호출되지 않는다
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log(`** beforRouteUpdate`);
+  //   this.no = to.params.no;
+  //   next();
+  // },
+  // route 객체에게 props 를 받아온다
+  props: ["no"],
   //   Getter 느낌.. Vue Instance 가 created 될 때 담아온 파라미터와 일치하는 값 리턴
   computed: {
     contact() {
