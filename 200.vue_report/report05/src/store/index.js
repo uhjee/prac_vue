@@ -17,35 +17,35 @@ const store = new Vuex.Store({
     diarylist: [{
         no: 1,
         writer: 'jee',
-        title: '일기장 제목 01',
+        title: '05일기장 제목 01',
         content: '난 오늘 너무 더웠다..',
         writeat: '2020년 08월 01일'
       },
       {
         no: 2,
         writer: 'min',
-        title: '일기장 제목 02',
-        content: '지겨운 장마가 끝나버렸다...그토록 싫었던 비가 그립다..',
+        title: 'diary title 02',
+        content: 'the rainy days is over... but im so hot.. 지겨운 장마가 끝나버렸다...그토록 싫었던 비가 그립다..',
         writeat: '2020년 08월 02일'
       },
       {
         no: 3,
         writer: 'jee',
-        title: '일기장 제목 03',
+        title: '01일기장 제목 03',
         content: 'vue를 배웠다.. 재미가 있었다.',
         writeat: '2020년 08월 07일'
       },
       {
         no: 4,
         writer: 'jee',
-        title: '일기장 제목 04',
+        title: '일기장 제목 05',
         content: '너무 더워서 더위사냥을 사먹어버렸다.',
         writeat: '2020년 08월 08일'
       },
       {
         no: 5,
         writer: 'haeng',
-        title: '일기장 제목 05',
+        title: '일기장 제목 04',
         content: '집에서 영화를 보았다.',
         writeat: '2020년 08월 09일'
       }
