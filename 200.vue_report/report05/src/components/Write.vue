@@ -14,13 +14,19 @@
         class=".form-control col-10"
         id="text-content"
         rows="8"
+        cols="50"
+        wrap="hard"
         placeholder="5글자 이상 내용을 적어주세요."
         v-model="content"
       ></textarea>
     </div>
     <div>
-      <button type="button" @click="addDiary" class="btn btn-success btn-sm">저 장</button>
-      <button type="button" @click="cancelAdd" class="btn btn-secondary btn-sm">취 소</button>
+      <button type="button" @click="addDiary" class="btn btn-success btn-sm">
+        저 장
+      </button>
+      <button type="button" @click="cancelAdd" class="btn btn-secondary btn-sm">
+        취 소
+      </button>
     </div>
   </div>
 </template>
@@ -31,7 +37,7 @@ export default {
   data() {
     return {
       title: "",
-      content: "",
+      content: ""
     };
   },
   methods: {
@@ -49,21 +55,21 @@ export default {
       // diary 추가하는 action으로 입력받은 title, content 전송
       this.$store.dispatch("addDiary", {
         title: this.title,
-        content: this.content,
+        content: this.content
       });
 
       // 다시 list로 라우팅
       this.$router.push({
-        name: "list",
+        name: "list"
       });
     },
     // 취소버튼 시 list로 보내기
     cancelAdd() {
       this.$router.push({
-        name: "list",
+        name: "list"
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

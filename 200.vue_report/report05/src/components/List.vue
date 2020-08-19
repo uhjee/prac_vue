@@ -97,11 +97,12 @@ export default {
     return {
       // 마우스오버 시 해당 diary.no을 담아온다
       mouseOverNum: 0,
-      //검색어 - title
+      //검색어 - title 기준으로..
       keyword: "",
       // 정렬
       sorting: {
         // 정렬기준 - diary의 properties 중 no, title
+        // default : no
         sortingField: "no",
         // 내림차순 -> false  오름차순 -> true..
         soringOrder: false
@@ -175,7 +176,6 @@ export default {
     },
     changeKeyword() {
       this.keyword = this.$refs.inputkeyword.value;
-      console.log(this.keyword);
     },
     setInitial() {
       // Dom element 초기화

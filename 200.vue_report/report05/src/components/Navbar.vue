@@ -6,8 +6,11 @@
         <span
           class="navbar-text"
           :style="{ color: 'gray', marginRight: '10px', fontSize: '13px' }"
-        >{{ id }} 님 환영합니다.</span>
-        <button id="logout-btn" class="btn btn-sm my-2 my-sm-0" @click="logout">로그아웃</button>
+          >{{ id }} 님 환영합니다.</span
+        >
+        <button id="logout-btn" class="btn btn-sm my-2 my-sm-0" @click="logout">
+          로그아웃
+        </button>
       </div>
     </nav>
   </div>
@@ -23,12 +26,15 @@ export default {
     logout() {
       this.$store.dispatch("logout");
       this.$router.push({ name: "login" });
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
+#navbar-wrapper {
+  margin-bottom: 40px;
+}
 #logout-btn {
   background-color: seagreen;
   color: white;
