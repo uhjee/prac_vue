@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import DateUtil from '../dateutil'
+
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    // 로그인 여부를 확인할 property
     id: '',
+    // 상세보기 화면에서 일치하는 하나의 diary만 넣어줄 property
     diary: {
       no: 0,
       title: '',
@@ -14,52 +16,111 @@ const store = new Vuex.Store({
       writer: '',
       writeat: ''
     },
+    //작성된 diary의 list_ dummy data
     diarylist: [{
         no: 1,
         writer: 'jee',
         title: '05일기장 제목 01',
-        content: '난 오늘 \n\n\n\n\n너무 더웠다..',
-        writeat: '2020년 08월 01일'
+        content: 'a\n난 오늘 \n\n\n\n\n너무 더웠다..',
+        writeat: 'Thu Aug 01 2020 11:35:57 GMT+0900 (대한민국 표준시)'
       },
       {
         no: 2,
         writer: 'min',
         title: 'diary title 02',
         content: 'the rainy days is over... \n\n\n\n\nbut im so hot..\n\n 지겨운 장마가 끝나버렸다...그토록 싫었던 비가 그립다..',
-        writeat: '2020년 08월 02일'
+        writeat: 'Thu Aug 02 2020 10:20:57 GMT+0900 (대한민국 표준시)'
       },
       {
         no: 3,
         writer: 'jee',
         title: '01일기장 제목 03',
-        content: 'vue를 배웠다.. \n\n\n재미가 있었다.',
-        writeat: '2020년 08월 07일'
+        content: 'ㅎ vue를 배웠다.. \n\n\n재미가 있었다.',
+        writeat: 'Thu Aug 05 2020 08:15:57 GMT+0900 (대한민국 표준시)'
       },
       {
         no: 4,
         writer: 'jee',
-        title: '일기장 제목 05',
+        title: 'diary title 01',
         content: '너무 더워서....\n\n\n\n 나는 더위사냥을 사먹어버렸다.',
-        writeat: '2020년 08월 08일'
+        writeat: 'Thu Aug 08 2020 10:35:57 GMT+0900 (대한민국 표준시)'
       },
       {
         no: 5,
         writer: 'haeng',
         title: '일기장 제목 04',
         content: '집에서 영화를 \n\n\n\n\n\n보았다.',
-        writeat: '2020년 08월 09일'
-      }
+        writeat: 'Thu Aug 08 2020 10:48:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 6,
+        writer: 'haeng',
+        title: '일기를 쓰려다가..',
+        content: '무심코\n\n\n 그대에게..\n\n\n 편지를 썼다..',
+        writeat: 'Thu Aug 10 2020 11:07:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 7,
+        writer: 'min',
+        title: '일기-1를 쓰려다가..',
+        content: '무심코 \n\n\n반성문을\n\n\n 썼다..',
+        writeat: 'Thu Aug 11 2020 10:05:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 8,
+        writer: 'jee',
+        title: '04일기장 제목 행복',
+        content: '마음을 열어\n\n\n\n\n\n 하늘을 보라 ',
+        writeat: 'Thu Aug 11 2020 08:35:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 9,
+        writer: 'jee',
+        title: '행복이란 무엇일까',
+        content: '난\n행\n복\n해\n.\n.\n.\n\n\n^^',
+        writeat: 'Thu Aug 14 2020 10:35:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 10,
+        writer: 'jee',
+        title: '행복과 사랑이란 무엇일까',
+        content: '88\n\n\n\n\n\n\n\n\n\n\n\n내용\n입니다\n.',
+        writeat: 'Thu Aug 15 2020 03:35:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 11,
+        writer: 'jee',
+        title: '일기장 제목 0401',
+        content: '66\n\n\n내용\n\n\n\n\n\n\n\n\n내용\n입니다\n.',
+        writeat: 'Thu Aug 16 2020 03:35:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 12,
+        writer: 'jee',
+        title: '일기장 제목 0501',
+        content: '111\n내\n용\n이\n에\n요\n.\n.\n.\n\n\n\n내용\n입니다\n.',
+        writeat: 'Thu Aug 17 2020 03:35:57 GMT+0900 (대한민국 표준시)'
+      },
+      {
+        no: 13,
+        writer: 'jee',
+        title: 'vue vue vue01 vue view vueviewvuew',
+        content: '01\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\n\n내용\n입니다\n.',
+        writeat: 'Thu Aug 19 2020 03:35:57 GMT+0900 (대한민국 표준시)'
+      },
     ]
   },
   mutations: {
+    // state.id 관련-------------------------------
     loginUser: (state, payload) => {
       state.id = payload.id;
     },
     logout: (state) => {
       state.id = '';
     },
+    // state.diary 관련-------------------------------
     // diary.no 로 하나의 diary 를 찾아 state에 넣어두는 mutation
-    setDirayOne: (state, payload) => {
+    setDiaryOne: (state, payload) => {
       let arr = state.diarylist.filter((d) => d.no == payload.no);
       state.diary = arr[0];
     },
@@ -77,29 +138,26 @@ const store = new Vuex.Store({
         title: payload.title,
         content: payload.content,
         writer: state.id,
-        // DateUtil.getTodayDate() :: 오늘 날짜를 'yyyy년 MM월 dd일' string으로 리턴
-        writeat: DateUtil.getTodayDate()
+        writeat: new Date()
       }
 
       state.diarylist.push(diary);
     }
   },
   actions: {
+    // state.id 관련-------------------------------
     loginUser: (store, payload) => {
       store.commit('loginUser', payload);
     },
     logout: (store) => {
-      if (confirm('로그아웃 하시겠어요?')) {
-        store.commit('logout');
-      }
+      store.commit('logout');
+      // state.diary 관련-------------------------------
     },
     setDirayOne: (store, payload) => {
-      store.commit('setDirayOne', payload);
+      let a = store.commit('setDiaryOne', payload);
     },
     deleteDiary: (store, payload) => {
-      if (confirm('정말로 삭제하시겠어요?')) {
-        store.commit('deleteDiary', payload);
-      }
+      store.commit('deleteDiary', payload);
     },
     addDiary: (store, payload) => {
       store.commit('addDiary', payload);
@@ -107,9 +165,6 @@ const store = new Vuex.Store({
 
 
   },
-  getters: {
-
-  }
 })
 
 
