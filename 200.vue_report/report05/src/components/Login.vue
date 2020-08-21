@@ -1,23 +1,29 @@
 <template>
-  <div id="login-wrapper" class="text-center jumbotron">
-    <div>
-      <h1 class="h3 mb-3 font-weight-normal">VueDiary_HeoJeeHaeng</h1>
-    </div>
-    <div>
-      <label for="id">사용자 id</label>
-      <input
-        class="form-control"
-        id="id"
-        ref="id"
-        type="text"
-        @keyup.enter="loginUser"
-        placeholder="아이디를 2글자 이상 입력하세요."
-      />
-    </div>
-    <div>
-      <button class="btn btn-lg btn-light btn-block" @click="loginUser">로-그인</button>
-    </div>
-  </div>
+  <el-container direction="vertical">
+    <el-header>Header</el-header>
+    <el-main>
+      <el-row type="flex" justify="center">
+        <el-col :span="12" id="login-wrapper">
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+            <h1 class="h3 mb-3 font-weight-normal">VueDiary_HeoJeeHaeng</h1>
+            <el-input
+              ref="id"
+              v-model="ruleForm.id"
+              placeholder="아이디를 2글자 이상 입력하세요"
+              @keyup.enter="loginUser"
+              clearable
+            >
+              <template slot="prepend">
+                <i class="el-icon-user-solid"></i>
+              </template>
+            </el-input>
+            <el-button type="plain" @click="submitForm(ruleForm)">로-그인</el-button>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-main>
+    <el-footer>Footer</el-footer>
+  </el-container>
 </template>
 
 <script>
@@ -28,16 +34,41 @@ export default {
   mounted() {
     this.$refs.id.focus();
   },
+  data() {
+    return {
+      ruleForm: {
+        id: "",
+      },
+      rules: {
+        id: [
+          {
+            required: true,
+            message: "id를 입력해주세요",
+            trigger: "blur",
+          },
+          {
+            min: 3,
+            max: 5,
+            message: "3글자에서 5글자로 입력해주세요",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
   methods: {
-    loginUser() {
-      let inputId = this.$refs.id.value;
-      if (inputId.length < 2) {
-        alert("아이디는 2글자 이상으로 입력해주세요.");
-        this.$refs.id.focus();
-        return;
-      }
+    submitForm(formName) {
+      console.log(this.$refs[formName]);
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
       // state.id 세팅
-      this.$store.dispatch("loginUser", { id: inputId });
+      this.$store.dispatch("loginUser", { id: this.inputid });
 
       this.$router
         .push({
@@ -52,15 +83,26 @@ export default {
 </script>
 
 <style scoped>
+.el-container {
+  text-align: center;
+}
+.el-header {
+  text-align: center;
+  line-height: 60px;
+}
 #login-wrapper {
   background-color: seagreen;
   color: white;
-  position: absolute;
+  width: 400px;
+  height: 250px;
+  padding: 30px;
+  border-radius: 4px;
+  /* position: absolute;
   top: 50%;
   left: 50%;
   border: 1px gray solid;
   margin-left: -200px;
-  margin-top: -230px;
+  margin-top: -230px; */
 }
 div {
   margin: 10px;
