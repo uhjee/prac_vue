@@ -58,9 +58,10 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      console.log(formName);
       console.log(this.$refs[formName]);
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
+      this.$refs[formName].id((valid) => {
+        if (valid.length > 2) {
           alert("submit!");
         } else {
           console.log("error submit!!");
