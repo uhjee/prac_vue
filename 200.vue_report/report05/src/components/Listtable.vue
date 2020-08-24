@@ -1,35 +1,74 @@
 <template>
-  <el-table
-    :data="diarylist"
-    border
-    stripe
-    style="width: 100%"
-    @cell-mouse-enter="handleMouseOver"
-    @cell-mouse-leave="handleMouseOver"
-  >
-    <el-table-column prop="writeat" label="Date" :formatter="dateFormatter" width="180"></el-table-column>
-    <!-- customizing column : template로 내부를 세부 조정  -->
-    <!-- 내부에서는 prop으로 row 등을  상속받아 사용 -->
-    <el-table-column prop="title" label="Title" width="400">
-      <template slot-scope="scope">
-        <span
-          class="diary-title"
-          style="margin-left: 10px"
-          @click="getDetail(scope.row.no)"
-        >{{scope.row.title}}</span>
-        <span class="float-right" v-show="mouseOverNum == scope.row.no" style="margin-right: 10px">
-          <el-button
-            size="mini"
-            @click="deleteDiary(scope.row.no)"
-            type="danger"
-            icon="el-icon-delete"
-            circle
-          ></el-button>
-        </span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="writer" label="Writer" width="100"></el-table-column>
-  </el-table>
+  <el-container>
+    <el-header>
+      <el-row style="display:flex; align-items:center">
+        <el-col :span="4">
+          <el-button type="success" icon="el-icon-edit" @click="moveToWrite">일기 쓰기</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-select v-model="sorting.sortingField" placeholder="정렬">
+            <el-option label="작성일" value="writeat"></el-option>
+            <el-option label="내 용" value="content"></el-option>
+            <el-option label="제 목" value="title"></el-option>
+          </el-select>
+          <el-switch v-model="sorting.soringOrder" active-text="오름차순" inactive-text="내림차순"></el-switch>
+        </el-col>
+        <el-col :span="8">
+          <el-input placeholder="검색어를 입력해주세요" v-model="keyword">
+            <!-- TODO: placeholder가 나오지 않는다.. -->
+            <!-- <el-select v-model="select" slot="prepend" placeholder="Select">
+              <el-option label="제 목" value="title"></el-option>
+              <el-option label="내 용" value="content"></el-option>
+              <el-option label="날 짜" value="writeat"></el-option>
+            </el-select>-->
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-main>
+      <el-row :gutter="20">
+        <el-col :span="18">
+          <el-table
+            :data="diarylist"
+            border
+            stripe
+            style="width: 100%"
+            @cell-mouse-enter="handleMouseOver"
+            @cell-mouse-leave="handleMouseOver"
+          >
+            <el-table-column prop="writeat" label="Date" :formatter="dateFormatter" width="180"></el-table-column>
+            <!-- customizing column : template로 내부를 세부 조정  -->
+            <!-- 내부에서는 prop으로 row 등을  상속받아 사용 -->
+            <el-table-column prop˝="title" label="Title">
+              <template slot-scope="scope">
+                <span
+                  class="diary-title"
+                  style="margin-left: 10px"
+                  @click="getDetail(scope.row.no)"
+                >{{scope.row.title}}</span>
+                <span
+                  class="float-right"
+                  v-show="mouseOverNum == scope.row.no"
+                  style="margin-right: 10px"
+                >
+                  <el-button
+                    size="mini"
+                    @click="deleteDiary(scope.row.no)"
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                  ></el-button>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="writer" label="Writer" width="100"></el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="6"></el-col>
+      </el-row>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -47,7 +86,9 @@ export default {
       // 마우스오버 시 해당하는 diary의 no를 담는 property
       mouseOverNum: 0,
 
-      //검색어 - diary.title 기준
+      //검색어 - title, content, date 기준
+      select: "",
+
       keyword: "",
 
       // 정렬
@@ -109,7 +150,7 @@ export default {
     },
   },
   methods: {
-    //   el-column의 attribute formater 사용
+    //   el-column의 attribute formater 사용 :: Data format 변환
     dateFormatter(row, column) {
       return DateUtil.convertKoreanFmt(row.writeat);
     },
@@ -121,6 +162,7 @@ export default {
     handleMouseOver(row, column, cell, event) {
       if (event.type == "mouseenter") {
         this.mouseOverNum = row.no;
+        // 나머지는 mouseleave인 경우. data의 mouseOverNum 초기화
       } else {
         this.mouseOverNum = 0;
       }
@@ -201,11 +243,14 @@ export default {
 
 <style>
 .diary-title {
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
 }
 .diary-title:hover {
   color: seagreen;
   font-weight: bold;
+}
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
 }
 </style>

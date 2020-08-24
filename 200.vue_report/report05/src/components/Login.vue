@@ -4,8 +4,10 @@
     <el-main>
       <el-row type="flex" justify="center">
         <el-col :span="12" id="login-wrapper">
+          <!-- form tag에 model 과 validation을 위한 rules를 바인딩 -->
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <h1 class="h3 mb-3 font-weight-normal">VueDiary_HeoJeeHaeng</h1>
+            <!-- el-form tag 의 자식 컴포넌트이기 때문에 prop으로 model의 데이터를 받는다 -->
             <el-form-item prop="id">
               <el-input
                 size="medium"
@@ -14,6 +16,8 @@
                 placeholder="아이디 입력하세요"
                 clearable
               >
+                <!-- slot 으로 내부 커스터마이징 -->
+                <!-- 자식 컴포넌트가 되는 것 -->
                 <template slot="prepend">
                   <i class="el-icon-user-solid"></i>
                 </template>
@@ -52,8 +56,8 @@ export default {
           },
           {
             min: 3,
-            max: 5,
-            message: "3글자에서 5글자로 입력해주세요",
+            max: 10,
+            message: "3글자에서 10글자로 입력해주세요",
             trigger: "blur",
           },
         ],
@@ -62,6 +66,7 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      // el-form 의 이벤트 _ validation check
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // state.id 세팅
