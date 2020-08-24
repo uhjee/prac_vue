@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>flex_css</title>
+    <style>
+        div {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        #flex-container {
+            /* height: calc(100%+200px); */
+            width: 900px;
+            height: 800px;
+            background-color: darkseagreen;
+            display: flex;
+            /* 가로기준 가운데 정렬 */
+            justify-content: space-around;
+            /* 세로기준 가운데 정렬 */
+            align-items: center;
+            /* 요소들의 정렬 방향 */
+            flex-direction: row;
+            /* 요소들을 한줄에 정렬할 지, 여러줄에 정렬할 지 */
+            flex-wrap: wrap;
+            /* flex-direction과 flex-wrap은 같이 자주 쓰이기 때문에  */
+            /* 묶어서 사용 */
+            /* flex-flow: column wrap; */
+            /* 여러줄 사이의 간격 지정 */
+            align-content: flex-start;
+        }
+
+        .yellow {
+            background-color: yellow;
+            width: 70px;
+            height: 70px;
+            margin: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #flex-container>:nth-child(2n):hover {
+            background-color: blue;
+            color: white;
+        }
+
+        #box {
+            background-color: black;
+            color: blanchedalmond;
+            order: -1;
+        }
+
+        #circle {
+            width: 50px;
+            height: 50px;
+            background-color: crimson;
+            border-radius: 50%;
+            color: cornsilk;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            /* left: 50%; */
+            ;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="flex-container">
+        <div class="yellow" style="background-color: tomato;">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div id="box" class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div class="yellow">
+            <span class="inner-text">1</span>
+        </div>
+        <div id="circle">
+            ABAB
+        </div>
+    </div>
+
+</body>
+
+</html>

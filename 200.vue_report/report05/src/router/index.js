@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../components/Login.vue'
 import List from '../components/List.vue'
+import ListTable from '../components/Listtable.vue'
 import Detail from '../components/Detail.vue'
 import Write from '../components/Write.vue'
 import Diary from '../components/Diary.vue'
@@ -26,6 +27,7 @@ const routes = [
     path: '/diary',
     // name: 'diary',
     redirect: {
+      // name: 'list'
       name: 'list'
     },
     component: Diary,
@@ -34,6 +36,12 @@ const routes = [
         path: '/diary/list',
         name: 'list',
         component: List,
+        props: true
+      },
+      {
+        path: '/diary/listtable',
+        name: 'listtable',
+        component: ListTable,
         props: true
       },
       {

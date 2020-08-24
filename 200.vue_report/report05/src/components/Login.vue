@@ -4,20 +4,24 @@
     <el-main>
       <el-row type="flex" justify="center">
         <el-col :span="12" id="login-wrapper">
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <h1 class="h3 mb-3 font-weight-normal">VueDiary_HeoJeeHaeng</h1>
-            <el-input
-              ref="id"
-              v-model="ruleForm.id"
-              placeholder="아이디를 2글자 이상 입력하세요"
-              @keyup.enter="loginUser"
-              clearable
-            >
-              <template slot="prepend">
-                <i class="el-icon-user-solid"></i>
-              </template>
-            </el-input>
-            <el-button type="plain" @click="submitForm(ruleForm)">로-그인</el-button>
+            <el-form-item prop="id">
+              <el-input
+                size="medium"
+                ref="id"
+                v-model="ruleForm.id"
+                placeholder="아이디 입력하세요"
+                clearable
+              >
+                <template slot="prepend">
+                  <i class="el-icon-user-solid"></i>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="plain" @click="submitForm('ruleForm')">로-그인</el-button>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -58,26 +62,23 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      console.log(formName);
-      console.log(this.$refs[formName]);
-      this.$refs[formName].id((valid) => {
-        if (valid.length > 2) {
-          alert("submit!");
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // state.id 세팅
+          this.$store.dispatch("loginUser", { id: this.ruleForm.id });
+
+          this.$router
+            .push({
+              name: "list",
+            })
+            .catch((e) => {
+              console.log(e);
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
-      // state.id 세팅
-      this.$store.dispatch("loginUser", { id: this.inputid });
-
-      this.$router
-        .push({
-          name: "list",
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
   },
 };
@@ -107,5 +108,8 @@ export default {
 }
 div {
   margin: 10px;
+}
+.el-form-item {
+  margin: 0px 0px 30px 0px;
 }
 </style>
