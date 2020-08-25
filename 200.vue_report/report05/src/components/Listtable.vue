@@ -40,7 +40,7 @@
             <el-table-column prop="writeat" label="Date" :formatter="dateFormatter" width="180"></el-table-column>
             <!-- customizing column : template로 내부를 세부 조정  -->
             <!-- 내부에서는 prop으로 row 등을  상속받아 사용 -->
-            <el-table-column prop˝="title" label="Title">
+            <el-table-column prop="title" label="Title">
               <template slot-scope="scope">
                 <span
                   class="diary-title"

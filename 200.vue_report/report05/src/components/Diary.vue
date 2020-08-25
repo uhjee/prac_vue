@@ -4,16 +4,11 @@
       <navbar></navbar>
     </el-header>
     <el-container>
-      <el-aside width="200px" style="padding: 30px">
-        <span @click="moveToListTable">리스트(표)</span>
-      </el-aside>
-      <el-container>
-        <el-main>
-          <!-- /diary 하위의 route 들이 보여질 곳 -->
-          <router-view></router-view>
-        </el-main>
-        <el-footer>Footer</el-footer>
-      </el-container>
+      <el-main>
+        <!-- /diary 하위의 route 들이 보여질 곳 -->
+        <router-view></router-view>
+      </el-main>
+      <el-footer>Footer 입니다.</el-footer>
     </el-container>
   </el-container>
 </template>
@@ -39,19 +34,36 @@ export default {
       }
     });
   },
-  methods: {
-    moveToListTable() {
-      this.$router.push({
-        name: "listtable",
-      });
-    },
-  },
 };
 </script>
 
 <style scoped>
-#diary-container {
-  margin-top: 80px;
-  margin-bottom: 10px;
+.el-container.is-vertical {
+  background-color: rgb(228, 225, 220);
+}
+.el-header {
+  padding: 0;
+}
+.el-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  background: #e1eec3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.el-main {
+  width: 900px;
+  margin: 0 auto;
+  background-color: white;
 }
 </style>

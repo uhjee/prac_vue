@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        /* .clearfix {
+            clear: both;
+            content: '';
+            display: block
+        } */
+
+        .container {
+            background-color: white;
+        }
+
+        .container .header {
+            background-color: tomato;
+            height: 70px;
+        }
+
+        .container .menu {
+            border-bottom: 1px solid crimson;
+        }
+
+        .container .menu::after {
+            clear: both;
+            content: '';
+            display: block;
+        }
+
+        .container .menu>div {
+            float: left;
+            width: 100px;
+            text-align: center;
+            height: 30px;
+            border-right: 1px solid #ddd;
+        }
+
+        .container .menu>div.selected {
+            background: #70acdc;
+        }
+
+        .container .main::after {
+            clear: both;
+            content: '';
+            display: block;
+        }
+
+        .container .main .side {
+            float: left;
+            width: 25%;
+            background-color: thistle;
+            height: 300px;
+        }
+
+        .container .main .article {
+            float: left;
+            width: 75%;
+        }
+
+        .container .footer {
+            background-color: burlywood;
+            border-top: 1px solid #ddd;
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">header</div>
+        <div class="menu ">
+            <div></div>
+            <div class="selected">selected</div>
+            <div></div>
+        </div>
+        <div class="main ">
+            <div class="side">side</div>
+            <div class="article">article</div>
+        </div>
+        <div class="footer">footer</div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .clearfix {
+            /* after 가상 선택자는 IE8 버전 이하에서 동작하지 않는다. */
+            /* 컨테이너 태그에 *zoom: 1이라는 옵션을 사용하면 비슷하게 문제 해결 */
+            *zoom: 1;
+        }
+
+        /* clearfix 클래스 뒤에서 부유 제거 */
+        .clearfix::after {
+            content: '';
+            display: block;
+            clear: both
+        }
+
+        .box-container {
+            width: 350px;
+            border: 2px solid #09c;
+            background-color: #d7f5ff;
+        }
+
+        .box-container .box {
+            width: 80px;
+            height: 40px;
+            border: 2px solid red;
+            background-color: #ffe7d5;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="box-container "> -->
+    <div class="box-container clearfix">
+        <div class="box" style="float:left">박스 1</div>
+        <div class="box" style="float:right">박스 2</div>
+        <!-- clear 속성을 쓰게 되면,부유시킨 이후 문서의 흐름을 제거 -->
+        <!-- <div style="clear:both"></div> -->
+    </div>
+    <div>박스 아래에 나타나야 하는 내용</div>
+</body>
+
+</html>

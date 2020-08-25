@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .h-container::after {
+            clear: both;
+            display: block;
+            content: ''
+        }
+
+        .h-container .item {
+            float: left;
+            width: 100px;
+            text-align: center;
+            border-right: 2px solid crimson;
+        }
+
+        .h-container .item.last {
+            float: right;
+            border-right: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="h-container">
+        <div class="item">menu 1</div>
+        <div class="item">menu 2</div>
+        <div class="item">menu 3</div>
+        <div class="item last">login</div>
+    </div>
+    <div>아래에 있어야 해요</div>
+</body>
+
+</html>

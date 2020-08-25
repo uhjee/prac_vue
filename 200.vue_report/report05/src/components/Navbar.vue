@@ -1,26 +1,19 @@
 <template>
-  <el-menu
-    mode="horizontal"
-    :default-active="activeIndex"
-    @select="handleSelect"
-    background-color="#2e8b57"
-    text-color="#f8f8ff"
-    active-text-color="#ff7847"
-  >
+  <el-menu mode="horizontal" :default-active="activeIndex">
     <el-menu-item index="1">
-      <span @click="moveToList">Vue_diary_Heojeehaeng</span>
+      <div @click="moveToList">Vue_diary_Heojeehaeng</div>
     </el-menu-item>
-    <el-submenu index="2">
-      <template slot="title">Diary</template>
-      <el-menu-item index="2-1">리스트</el-menu-item>
-      <el-menu-item index="2-2">다이어리 쓰기</el-menu-item>
-    </el-submenu>
-    <el-menu-item style="float: right;" index="3">
-      <span style="color: 'gray'; marginRight: '10px'; fontSize: '13px'">
-        <el-avatar>{{ id }}</el-avatar>
-        <span id="navbar-text-id">{{ id }}</span> 님 환영합니다.
-      </span>
-      <el-button size="small" type="warning" @click="openMessageBox">logout</el-button>
+    <el-menu-item>
+      <div @click="moveToListTable">listtable</div>
+    </el-menu-item>
+    <el-menu-item class="info-login">
+      <el-avatar class="margin-right-10">{{ id }}</el-avatar>
+      <div class="navbar-id-text margin-right-10">{{ id }}</div>님 환영합니다.
+      <el-button
+        class="btn-logout margin-left-10"
+        size="small"
+        @click="openLogoutMessageBox"
+      >Sign out</el-button>
     </el-menu-item>
   </el-menu>
 </template>
@@ -37,7 +30,6 @@ export default {
   },
   computed: mapState(["id"]),
   methods: {
-    handleSelect(key, keyPath) {},
     logout() {
       this.$store.dispatch("logout");
       this.$router.push({ name: "login" });
@@ -48,7 +40,12 @@ export default {
         // console.log(error);
       });
     },
-    openMessageBox() {
+    moveToListTable() {
+      this.$router.push({
+        name: "listtable",
+      });
+    },
+    openLogoutMessageBox() {
       this.$confirm(
         `${this.$store.state.id} 님, 로그아웃하시겠어요?`,
         "Logout",
@@ -77,14 +74,49 @@ export default {
 </script>
 
 <style scoped>
-#navbar-brand {
-  cursor: pointer;
+.el-menu {
+  background: #e1eec3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ff4b4e,
+    #ffcf91
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-#navbar-brand:hover {
-  color: forestgreen;
+.el-menu--horizontal > .el-menu-item {
+  color: white;
 }
-#navbar-text-id {
+.el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: 3px solid white;
+}
+.el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+  color: #ff4b4e;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #ffcf91;
+}
+.info-login {
+  float: right;
+}
+.navbar-id-text {
   font-weight: bolder;
-  color: tomato;
+  display: inline-block;
+}
+.el-avatar {
+  background-color: #fc7375;
+}
+.btn-logout {
+  color: #ff4b4e;
+}
+.margin-right-10 {
+  margin-right: 10px;
+}
+.margin-left-10 {
+  margin-left: 10px;
 }
 </style>

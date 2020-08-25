@@ -1,36 +1,24 @@
 <template>
-  <el-container direction="vertical">
-    <el-header>Header</el-header>
-    <el-main>
-      <el-row type="flex" justify="center">
-        <el-col :span="12" id="login-wrapper">
-          <!-- form tag에 model 과 validation을 위한 rules를 바인딩 -->
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-            <h1 class="h3 mb-3 font-weight-normal">VueDiary_HeoJeeHaeng</h1>
-            <!-- el-form tag 의 자식 컴포넌트이기 때문에 prop으로 model의 데이터를 받는다 -->
-            <el-form-item prop="id">
-              <el-input
-                size="medium"
-                ref="id"
-                v-model="ruleForm.id"
-                placeholder="아이디 입력하세요"
-                clearable
-              >
-                <!-- slot 으로 내부 커스터마이징 -->
-                <!-- 자식 컴포넌트가 되는 것 -->
-                <template slot="prepend">
-                  <i class="el-icon-user-solid"></i>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="plain" @click="submitForm('ruleForm')">로-그인</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-    </el-main>
-    <el-footer>Footer</el-footer>
+  <el-container class="login-container background-theme">
+    <div class="login-box">
+      <!-- form tag에 model 과 validation을 위한 rules를 바인딩 -->
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+        <div class="login-margin-bottom">VueDiary_HeoJeeHaeng</div>
+        <!-- el-form tag 의 자식 컴포넌트이기 때문에 prop으로 model의 데이터를 받는다 -->
+        <el-form-item prop="id">
+          <el-input size="medium" ref="id" v-model="ruleForm.id" placeholder="아이디 입력하세요" clearable>
+            <!-- slot 으로 내부 커스터마이징 -->
+            <!-- 자식 컴포넌트가 되는 것 -->
+            <template slot="prepend">
+              <i class="el-icon-user-solid"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="btn-login" @click="submitForm('ruleForm')">sign in</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </el-container>
 </template>
 
@@ -79,6 +67,9 @@ export default {
             .catch((e) => {
               console.log(e);
             });
+          this.$message({
+            message: `${this.ruleForm.id}님, 반갑습니다 ;)`,
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -90,31 +81,52 @@ export default {
 </script>
 
 <style scoped>
-.el-container {
-  text-align: center;
+.background-theme {
+  background: #e1eec3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-.el-header {
+.login-container {
   text-align: center;
-  line-height: 60px;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#login-wrapper {
-  background-color: seagreen;
+.login-box {
+  background-color: white;
+  color: tomato;
+  width: 300px;
+  height: 200px;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.login-margin-bottom {
+  margin-bottom: 20px;
+}
+.btn-login {
+  width: 100%;
   color: white;
-  width: 400px;
-  height: 250px;
-  padding: 30px;
-  border-radius: 4px;
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px gray solid;
-  margin-left: -200px;
-  margin-top: -230px; */
-}
-div {
-  margin: 10px;
-}
-.el-form-item {
-  margin: 0px 0px 30px 0px;
+  background: #e1eec3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ec4143,
+    #f58d5d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 </style>

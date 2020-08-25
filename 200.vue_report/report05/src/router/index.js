@@ -25,9 +25,7 @@ const routes = [
   },
   {
     path: '/diary',
-    // name: 'diary',
     redirect: {
-      // name: 'list'
       name: 'list'
     },
     component: Diary,
