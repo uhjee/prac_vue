@@ -14,6 +14,8 @@ const store = new Vuex.Store({
     diary: {
       no: 0,
       title: '',
+      weather: '',
+      emotion: '',
       content: '',
       writer: '',
       writeat: ''
@@ -23,6 +25,8 @@ const store = new Vuex.Store({
         no: 1,
         writer: 'jee',
         title: '05일기장 제목 01',
+        weather: 'rain',
+        emotion: 'angry',
         content: 'a\n난 오늘 \n\n\n\n\n너무 더웠다..',
         writeat: 'Thu Aug 01 2020 17:35:57 GMT+0900 (대한민국 표준시)'
       },
@@ -30,6 +34,8 @@ const store = new Vuex.Store({
         no: 2,
         writer: 'min',
         title: 'diary title 02',
+        weather: 'sunny',
+        emotion: 'angry',
         content: 'the rainy days is over... \n\n\n\n\nbut im so hot..\n\n 지겨운 장마가 끝나버렸다...그토록 싫었던 비가 그립다..',
         writeat: 'Thu Aug 02 2020 15:20:57 GMT+0900 (대한민국 표준시)'
       },
@@ -37,6 +43,8 @@ const store = new Vuex.Store({
         no: 3,
         writer: 'jee',
         title: '01일기장 제목 03',
+        weather: 'cloudy',
+        emotion: 'sad',
         content: 'ㅎ vue를 배웠다.. \n\n\n재미가 있었다.',
         writeat: 'Thu Aug 05 2020 08:15:57 GMT+0900 (대한민국 표준시)'
       },
@@ -44,6 +52,8 @@ const store = new Vuex.Store({
         no: 4,
         writer: 'jee',
         title: 'diary title 01',
+        weather: 'snow',
+        emotion: 'sad',
         content: '너무 더워서....\n\n\n\n 나는 더위사냥을 사먹어버렸다.',
         writeat: 'Thu Aug 08 2020 19:35:57 GMT+0900 (대한민국 표준시)'
       },
@@ -51,6 +61,8 @@ const store = new Vuex.Store({
         no: 5,
         writer: 'haeng',
         title: '일기장 제목 04',
+        weather: 'rain',
+        emotion: 'happy',
         content: '집에서 영화를 \n\n\n\n\n\n보았다.',
         writeat: 'Thu Aug 08 2020 10:48:57 GMT+0900 (대한민국 표준시)'
       },
@@ -58,6 +70,8 @@ const store = new Vuex.Store({
         no: 6,
         writer: 'haeng',
         title: '일기를 쓰려다가..',
+        weather: 'sunny',
+        emotion: 'happy',
         content: '무심코\n\n\n 그대에게..\n\n\n 편지를 썼다..',
         writeat: 'Thu Aug 10 2020 15:07:57 GMT+0900 (대한민국 표준시)'
       },
@@ -65,6 +79,8 @@ const store = new Vuex.Store({
         no: 7,
         writer: 'min',
         title: '일기-1를 쓰려다가..',
+        weather: 'rain',
+        emotion: 'sad',
         content: '무심코 \n\n\n반성문을\n\n\n 썼다..',
         writeat: 'Thu Aug 11 2020 17:05:57 GMT+0900 (대한민국 표준시)'
       },
@@ -72,6 +88,8 @@ const store = new Vuex.Store({
         no: 8,
         writer: 'jee',
         title: '04일기장 제목 행복',
+        weather: 'cloudy',
+        emotion: 'happy',
         content: '마음을 열어\n\n\n\n\n\n 하늘을 보라 ',
         writeat: 'Thu Aug 11 2020 08:35:57 GMT+0900 (대한민국 표준시)'
       },
@@ -79,6 +97,8 @@ const store = new Vuex.Store({
         no: 9,
         writer: 'jee',
         title: '행복이란 무엇일까',
+        weather: 'sunny',
+        emotion: 'sad',
         content: '난\n행\n복\n해\n.\n.\n.\n\n\n^^',
         writeat: 'Thu Aug 14 2020 15:27:57 GMT+0900 (대한민국 표준시)'
       },
@@ -86,6 +106,8 @@ const store = new Vuex.Store({
         no: 10,
         writer: 'jee',
         title: '행복과 사랑이란 무엇일까',
+        weather: 'sunny',
+        emotion: 'happy',
         content: '88\n\n\n\n\n\n\n\n\n\n\n\n내용\n입니다\n.',
         writeat: 'Thu Aug 15 2020 17:32:57 GMT+0900 (대한민국 표준시)'
       },
@@ -93,6 +115,8 @@ const store = new Vuex.Store({
         no: 11,
         writer: 'jee',
         title: '일기장 제목 0401 무엇일까',
+        weather: 'snow',
+        emotion: 'happy',
         content: '66\n\n\n내용\n\n\n\n\n\n\n\n\n내용\n입니다\n.',
         writeat: 'Thu Aug 16 2020 16:35:57 GMT+0900 (대한민국 표준시)'
       },
@@ -100,12 +124,16 @@ const store = new Vuex.Store({
         no: 12,
         writer: 'jee',
         title: '일기장 제목 0501',
+        weather: 'sunny',
+        emotion: 'happy',
         content: '111\n내\n용\n이\n에\n요\n.\n.\n.\n\n\n\n내용\n입니다\n.',
         writeat: 'Thu Aug 17 2020 03:15:57 GMT+0900 (대한민국 표준시)'
       },
       {
         no: 13,
         writer: 'jee',
+        weather: 'cloudy',
+        emotion: 'sad',
         title: 'vue vue vue01 vue view vueviewvuew 행복',
         content: '01\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\n\n내용\n입니다\n.',
         writeat: 'Thu Aug 19 2020 14:05:57 GMT+0900 (대한민국 표준시)'
@@ -146,6 +174,8 @@ const store = new Vuex.Store({
       let diary = {
         no: maxNo + 1,
         title: payload.title,
+        weather: payload.weather,
+        emotion: payload.emotion,
         content: payload.content,
         writer: state.id,
         writeat: new Date()
@@ -156,6 +186,8 @@ const store = new Vuex.Store({
     updateDiary: (state, payload) => {
       let index = state.diarylist.findIndex(d => d.no == state.diary.no);
       state.diarylist[index].title = payload.title;
+      state.diarylist[index].weather = payload.weather;
+      state.diarylist[index].emotion = payload.emotion;
       state.diarylist[index].content = payload.content;
     }
   },

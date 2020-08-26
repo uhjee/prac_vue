@@ -7,9 +7,11 @@
     </el-header>
     <el-main>
       <el-form :model="writeForm" :rules="rules" ref="writeForm" label-width="80px">
+        <!-- 제목 input -->
         <el-form-item label="Title" prop="title">
           <el-input v-model="writeForm.title" autofocus.native placeholder="제목을 입력하세요."></el-input>
         </el-form-item>
+        <!-- 날씨 radio -->
         <el-form-item label="Weather" prop="weather">
           <el-radio-group v-model="writeForm.weather">
             <el-radio-button label="sunny">
@@ -26,6 +28,15 @@
             </el-radio-button>
           </el-radio-group>
         </el-form-item>
+        <!-- 기분 select -->
+        <el-form-item label="Emotion" prop="emotion">
+          <el-select v-model="writeForm.emotion" placeholder="Select">
+            <el-option label="기쁨" value="happy"></el-option>
+            <el-option label="우울" value="sad"></el-option>
+            <el-option label="화남" value="angry"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 내용 input -->
         <el-form-item label="Content" prop="content">
           <el-input
             v-model="writeForm.content"
@@ -34,7 +45,7 @@
             type="textarea"
             placeholder="내용을 입력하세요."
             maxlength="100"
-            rows="25"
+            rows="20"
             show-word-limit
           ></el-input>
         </el-form-item>
@@ -56,7 +67,10 @@ export default {
       writeForm: {
         title: "",
         content: "",
+        // default로 sunny
         weather: "sunny",
+        // default로 happy
+        emotion: "happy",
       },
       // el-form이 제공하는 validation 을 위한 규칙들
       rules: {
@@ -81,6 +95,8 @@ export default {
     if (this.formmode == "update") {
       this.writeForm.title = this.diary.title;
       this.writeForm.content = this.diary.content;
+      this.writeForm.weather = this.diary.weather;
+      this.writeForm.emotion = this.diary.emotion;
     }
   },
   computed: {
@@ -128,6 +144,8 @@ export default {
     addDiary() {
       this.$store.dispatch("addDiary", {
         title: this.writeForm.title,
+        weather: this.writeForm.weather,
+        emotion: this.writeForm.emotion,
         content: this.writeForm.content,
       });
       this.$message({
@@ -142,6 +160,8 @@ export default {
     updateDiary(no) {
       this.$store.dispatch("updateDiary", {
         title: this.writeForm.title,
+        weather: this.writeForm.weather,
+        emotion: this.writeForm.emotion,
         content: this.writeForm.content,
       });
       this.$message({

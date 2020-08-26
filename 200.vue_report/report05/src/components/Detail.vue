@@ -51,7 +51,15 @@
               ></el-button>
             </el-popconfirm>
           </div>
-          <div class="header-writer">작성자: {{diary.writer}}</div>
+          <div class="header-text">
+            <div class="header-writer">작성자: {{diary.writer}}</div>
+            <div>
+              날 씨:
+              <!-- html태그를 받기 위해서는 머스타치로 불가하기 때문에 v-html 사용 -->
+              <span v-html="weather"></span>
+            </div>
+            <div>기 분: {{emotion}}</div>
+          </div>
         </div>
         <div class="main-content">{{diary.content}}</div>
       </el-main>
@@ -90,7 +98,33 @@ export default {
   created() {
     this.$store.dispatch("setDirayOne", { no: this.no });
   },
-  computed: mapState(["diary"]),
+  computed: {
+    diary() {
+      return this.$store.state.diary;
+    },
+    weather() {
+      let weatherString = this.diary.weather;
+      if (weatherString == "sunny") {
+        return "<i class='el-icon-sunny'></i>";
+      } else if (weatherString == "cloudy") {
+        return "<i class='el-icon-cloudy'></i>";
+      } else if (weatherString == "rain") {
+        return "<i class='el-icon-heavy-rain'></i>";
+      } else {
+        return "<i class='el-icon-light-rain'></i>";
+      }
+    },
+    emotion() {
+      let emotionCode = this.diary.emotion;
+      if (emotionCode == "happy") {
+        return "기 쁨";
+      } else if (emotionCode == "sad") {
+        return "슬 픔";
+      } else {
+        return "화 남";
+      }
+    },
+  },
   methods: {
     moveToList() {
       this.$router.push({
@@ -153,10 +187,12 @@ export default {
   font-weight: 500;
   margin-bottom: 10px;
 }
-.header-writer {
+.header-text {
   font-size: 16px;
   color: rgb(133, 125, 124);
-  margin-left: 20px;
+  display: flex;
+  justify-content: space-around;
+  /* margin-left: 20px; */
 }
 .btn-list {
   float: right;
