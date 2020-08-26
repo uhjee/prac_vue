@@ -1,4 +1,6 @@
+
 <template>
+  <!-- 쓰기와 수정하기는 한 화면에서 vuex의 state 의 formmode를 통해 동적 구성 -->
   <el-container class="write-container">
     <el-header>
       <el-page-header @back="goBack" :content="headingText" title="뒤로가기"></el-page-header>
@@ -39,6 +41,7 @@ export default {
         title: "",
         content: "",
       },
+      // el-form이 제공하는 validation 을 위한 규칙들
       rules: {
         title: [
           { required: true, message: "제목을 입력하세요", trigger: "blur" },

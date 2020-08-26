@@ -1,7 +1,9 @@
 <template>
   <el-container class="list-container">
+    <!-- 리트스 보기 전환, 글쓰기, 정렬, 검색 등이 있는 헤더 -->
     <el-header class="list-header">
       <el-button-group class="btn-group-view margin-right-10">
+        <!-- data의 listmode 에 따라서 버튼 토글 효과 -->
         <el-button
           icon="el-icon-tickets"
           :class="{ 'btn-color': listmode == 'timeline' }"
@@ -13,39 +15,42 @@
           @click="changeListMode('card')"
         ></el-button>
       </el-button-group>
+      <!-- 새로운 일기 쓰기 버튼 -->
       <el-button icon="el-icon-edit" @click="moveToWrite" circle class="btn-color margin-right-10"></el-button>
+      <!-- 정렬기준 select -->
       <el-select
         claass="input-sorting margin-right-10"
         v-model="sorting.sortingField"
         placeholder="정렬"
+        ref="sortingcondition"
       >
         <el-option label="작성일" value="writeat"></el-option>
         <el-option label="내 용" value="content"></el-option>
         <el-option label="제 목" value="title"></el-option>
       </el-select>
+      <!-- 내림차순 오름차순  -->
       <el-switch
         class="margin-right-10"
         v-model="sorting.soringOrder"
         active-text="오름차순"
         inactive-text="내림차순"
+        active-color="#f8b4b5"
       ></el-switch>
+      <!-- 검색  input -->
       <el-input
         class="input-search-keyword"
+        ref="inputkeyword"
         placeholder="검색어를 입력해주세요"
         v-model="inputKeyword"
         @keydown.enter.native="changeKeyword"
         clearable
       >
-        <!-- TODO: placeholder가 나오지 않는다.. -->
-        <!-- <el-select v-model="select" slot="prepend" placeholder="Select">
-              <el-option label="제 목" value="title"></el-option>
-              <el-option label="내 용" value="content"></el-option>
-              <el-option label="날 짜" value="writeat"></el-option>
-        </el-select>-->
+        <!-- 자식 컴포넌트 element-ui가 뚫어놓은 slot으로 자리 들어간다 -->
         <template slot="prepend">
           <i class="el-icon-search"></i>
         </template>
       </el-input>
+      <el-button type="plian" @click="setInitial">초기화</el-button>
     </el-header>
     <!-- listmode가 timeline일 때 ------------------------------------------ -->
     <el-main class="list-main" v-if="listmode== 'timeline'">
@@ -56,12 +61,14 @@
           :timestamp="changeKoreanDateFmt(diary.writeat)"
           placement="top"
         >
+          <!-- mouseOver 에 따른 동적 클래스 바인딩 -->
           <el-card :class="{ active: mouseOverNum == diary.no }">
             <div
               class="card-body"
               @mouseover="changeMouseNum(diary.no)"
               @mouseleave="changeMouseNum(0)"
             >
+              <!-- mouseOver 시에만 보여주는 delete button -->
               <div v-show="mouseOverNum == diary.no">
                 <el-popconfirm
                   confirmButtonText="네"
@@ -89,11 +96,16 @@
           </el-card>
         </el-timeline-item>
       </el-timeline>
+      <!--'맨위로' 버튼:: scroll Y축이 150 내려갔을 경우, 맨위로 버튼 보이기 -->
+      <div id="btn-to-top" v-show="windowTop > 150">
+        <button @click="moveToTop" class="btn btn-warning btn-sm" style="color: white">TOP</button>
+      </div>
     </el-main>
 
     <!-- listmode가 card일 때 ------------------------------------------ -->
     <el-main class="list-main" v-if="listmode == 'card'">
       <div class="card-row">
+        <!-- mouseOver 에 따른 동적 클래스 바인딩 -->
         <el-card
           :class="{ active: mouseOverNum == diary.no }"
           v-for="diary in diarylist"
@@ -105,6 +117,7 @@
               @mouseover="changeMouseNum(diary.no)"
               @mouseleave="changeMouseNum(0)"
             >
+              <!-- mouseOver 시에만 보여주는 delete button -->
               <div v-show="mouseOverNum == diary.no">
                 <el-popconfirm
                   confirmButtonText="네"
@@ -135,6 +148,10 @@
             </div>
           </div>
         </el-card>
+      </div>
+      <!--'맨위로' 버튼:: scroll Y축이 150 내려갔을 경우, 맨위로 버튼 보이기 -->
+      <div id="btn-to-top" v-show="windowTop > 150">
+        <button @click="moveToTop" class="btn btn-warning btn-sm" style="color: white">TOP</button>
       </div>
     </el-main>
   </el-container>
@@ -268,10 +285,11 @@ export default {
     // 정렬, 검색 초기화 메소드
     setInitial() {
       // Dom element 초기화
-      this.$refs.inputkeyword.value = "";
-      this.$refs.sortingcondition.selectedIndex = 0;
+      // this.$refs.inputkeyword.value = "";
+      // this.$refs.sortingcondition.value = "writeat";
       // data() 초기화
       this.keyword = "";
+      this.inputKeyword = "";
       this.sorting.sortingField = "writeat";
       this.sorting.soringOrder = false;
     },
@@ -305,7 +323,7 @@ export default {
     changeKoreanDetailDateFmt(dateString) {
       return DateUtil.convertKoreanDetailFmt(dateString);
     },
-    // 맨위로 가기 버튼
+    // TODO:: 맨위로 가기 버튼 .. 내부 스크롤을 잡지 못한다..
     moveToTop() {
       window.scrollTo({
         top: 0,
@@ -330,7 +348,7 @@ export default {
 }
 .el-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
@@ -350,9 +368,10 @@ export default {
 .el-header .el-select {
   width: 15%;
 }
+.el-switch__label.is-active {
+  color: #fc7375;
+}
 .el-header .input-search-keyword {
-  float: right;
-  /* justify-self: flex-end; */
   width: 30%;
 }
 .el-timeline .el-card {
@@ -428,6 +447,7 @@ div.card-box {
 
 .active {
   border: 2px solid rgb(245, 95, 95);
+  background-color: #fff5f5;
 }
 .margin-right-10 {
   margin-right: 10px;
@@ -440,5 +460,10 @@ div.card-box {
 }
 .margin-left-20 {
   margin-left: 10px;
+}
+#btn-to-top {
+  position: fixed;
+  top: 20%;
+  right: 3%;
 }
 </style>

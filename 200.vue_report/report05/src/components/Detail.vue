@@ -13,6 +13,7 @@
           <div class="header-writeat">{{changeDateFmt(diary.writeat)}}</div>
           <div class="header-title">{{diary.title}}</div>
           <div class="btn-list">
+            <!-- 리스트로 이동하는 버튼 -->
             <el-button
               class="btn-back"
               size="mini"
@@ -21,6 +22,7 @@
               circle
               @click="moveToList"
             ></el-button>
+            <!-- 수정하기로 이동하는 버튼 -->
             <el-button
               class="btn-update"
               size="mini"
@@ -28,6 +30,7 @@
               circle
               @click="moveToUpdate(diary.no)"
             ></el-button>
+            <!-- 삭제 메세지 및 버튼 -->
             <el-popconfirm
               confirmButtonText="네"
               cancelButtonText="아니에요"
@@ -94,15 +97,19 @@ export default {
         name: "list",
       });
     },
+    // 수정하기 메소드
     moveToUpdate(no) {
+      // formmode를 update로 전환, 이후 일치하는 diary 가져온다
       this.$store.dispatch("changeFormMode", {
         formmode: "update",
         no: no,
       });
+      // update로 라우팅
       this.$router.push({
         name: "update",
       });
     },
+    // 삭제 메소드
     deleteDiary(no) {
       this.$store.dispatch("deleteDiary", { no: this.no });
       this.$message({
