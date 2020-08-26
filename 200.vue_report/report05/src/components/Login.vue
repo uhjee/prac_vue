@@ -6,7 +6,14 @@
         <div class="login-margin-bottom">VueDiary_HeoJeeHaeng</div>
         <!-- el-form tag 의 자식 컴포넌트이기 때문에 prop으로 model의 데이터를 받는다 -->
         <el-form-item prop="id">
-          <el-input size="medium" ref="id" v-model="ruleForm.id" placeholder="아이디 입력하세요" clearable>
+          <el-input
+            size="medium"
+            ref="id"
+            v-model="ruleForm.id"
+            placeholder="아이디 입력하세요"
+            clearable
+            @keydown.enter.native="submitForm('ruleForm')"
+          >
             <!-- slot 으로 내부 커스터마이징 -->
             <!-- 자식 컴포넌트가 되는 것 -->
             <template slot="prepend">

@@ -10,6 +10,24 @@ export default {
     return `${year}년 ${month}월 ${day}일`;
   },
 
+  convertKoreanDetailFmt: (dateString) => {
+    let date = new Date(dateString);
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1);
+    let day = date.getDate();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let ampm = "오전";
+    month = month >= 10 ? month : `0${month}` //03, 05 두자리로 월 출력
+    day = day >= 10 ? day : `0${day}`; //01, 02 두자리로 일 출력
+    if (hour > 12) {
+      ampm = "오후";
+      hour -= 12;
+    }
+    hour = hour >= 10 ? hour : `0${hour}`; //01, 02 두자리로 일 출력
+    minute = minute >= 10 ? minute : `0${minute}`; //01, 02 두자리로 일 출력
+    return `${year}년 ${month}월 ${day}일 ${ampm} ${hour}시 ${minute}분`;
+  },
   convertDetailFmt: (dateString) => {
     let date = new Date(dateString);
     let year = date.getFullYear();

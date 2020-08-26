@@ -2,9 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../components/Login.vue'
 import List from '../components/List.vue'
-import ListTable from '../components/Listtable.vue'
 import Detail from '../components/Detail.vue'
-import Write from '../components/Write.vue'
+import DiaryForm from '../components/DiaryForm.vue'
 import Diary from '../components/Diary.vue'
 import NotFound from '../components/NotFound.vue'
 
@@ -37,22 +36,22 @@ const routes = [
         props: true
       },
       {
-        path: '/diary/listtable',
-        name: 'listtable',
-        component: ListTable,
+        // parameter 숫자만 받도록 정규식 처리
+        path: '/diary/:no(\\d+)',
+        name: 'detail',
+        component: Detail,
         props: true
       },
       {
         path: '/diary/write',
         name: 'write',
-        component: Write,
+        component: DiaryForm,
         props: true
       },
       {
-        // parameter 숫자만 받도록 정규식 처리
         path: '/diary/:no(\\d+)',
-        name: 'detail',
-        component: Detail,
+        name: 'update',
+        component: DiaryForm,
         props: true
       },
 

@@ -1,77 +1,143 @@
 <template>
-  <div>
-    <!-- 새로운 일기쓰기, 정렬, 검색 등 -->
-    <div id="list-header">
-      <div class="row">
-        <div class="col-3 text-left">
-          <button type="button" class="btn btn-success btn-sm" @click="moveToWrite">새로운 일기 쓰기</button>
-        </div>
-        <div class="col-9">
-          <div class="row float-right">
-            <select
-              id="sorting-condition"
-              ref="sortingcondition"
-              @change="changeSortingCondition"
-              style="margin-right:10px"
-            >
-              <option value="w0" selected>최신순</option>
-              <option value="w1">오래된 순</option>
-              <option value="t1">제목-오름차순</option>
-              <option value="t0">제목-내림차순</option>
-              <option value="c1">내용-오름차순</option>
-              <option value="c0">내용-내림차순</option>
-            </select>
-            <input
-              type="text"
-              class="form-control-sm"
-              placeholder="단어를 입력하세요"
-              ref="inputkeyword"
-              @keyup="changeKeyword"
-              style="margin-right:5px"
-            />
-            <button type="button" class="btn btn-secondary btn-sm" @click="setInitial">정렬/검색 초기화</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 일기 리스트 -->
-    <div id="list-wrapper">
-      <!-- v-for 속성 element -->
-      <div
-        class="card"
-        v-for="(diary, index) in diarylist"
-        :key="diary.no"
-        :class="{ active: mouseOverNum == diary.no }"
-        @mouseover="changeMouseNum(diary.no)"
-        @mouseleave="changeMouseNum(0)"
-        :style="{ backgroundColor: getEvenColor(index) }"
+  <el-container class="list-container">
+    <el-header class="list-header">
+      <el-button-group class="btn-group-view margin-right-10">
+        <el-button
+          icon="el-icon-tickets"
+          :class="{ 'btn-color': listmode == 'timeline' }"
+          @click="changeListMode('timeline')"
+        ></el-button>
+        <el-button
+          icon="el-icon-menu"
+          :class="{ 'btn-color': listmode == 'card' }"
+          @click="changeListMode('card')"
+        ></el-button>
+      </el-button-group>
+      <el-button icon="el-icon-edit" @click="moveToWrite" circle class="btn-color margin-right-10"></el-button>
+      <el-select
+        claass="input-sorting margin-right-10"
+        v-model="sorting.sortingField"
+        placeholder="정렬"
       >
-        <div class="card-body">
-          <div class="row align-items-center">
+        <el-option label="작성일" value="writeat"></el-option>
+        <el-option label="내 용" value="content"></el-option>
+        <el-option label="제 목" value="title"></el-option>
+      </el-select>
+      <el-switch
+        class="margin-right-10"
+        v-model="sorting.soringOrder"
+        active-text="오름차순"
+        inactive-text="내림차순"
+      ></el-switch>
+      <el-input
+        class="input-search-keyword"
+        placeholder="검색어를 입력해주세요"
+        v-model="inputKeyword"
+        @keydown.enter.native="changeKeyword"
+        clearable
+      >
+        <!-- TODO: placeholder가 나오지 않는다.. -->
+        <!-- <el-select v-model="select" slot="prepend" placeholder="Select">
+              <el-option label="제 목" value="title"></el-option>
+              <el-option label="내 용" value="content"></el-option>
+              <el-option label="날 짜" value="writeat"></el-option>
+        </el-select>-->
+        <template slot="prepend">
+          <i class="el-icon-search"></i>
+        </template>
+      </el-input>
+    </el-header>
+    <!-- listmode가 timeline일 때 ------------------------------------------ -->
+    <el-main class="list-main" v-if="listmode== 'timeline'">
+      <el-timeline>
+        <el-timeline-item
+          v-for="diary in diarylist"
+          :key="diary.no"
+          :timestamp="changeKoreanDateFmt(diary.writeat)"
+          placement="top"
+        >
+          <el-card :class="{ active: mouseOverNum == diary.no }">
             <div
-              class="col-2"
-              :style="{ marginRight: '30px', fontSize: '12px', color: 'gray' }"
-            >{{ changeDateFmt(diary.writeat) }}</div>
-            <div class="col-9 row align-items-center">
-              <span class="diary-title" @click="getDetail(diary.no)">{{ diary.title }}</span>
+              class="card-body"
+              @mouseover="changeMouseNum(diary.no)"
+              @mouseleave="changeMouseNum(0)"
+            >
+              <div v-show="mouseOverNum == diary.no">
+                <el-popconfirm
+                  confirmButtonText="네"
+                  cancelButtonText="아니에요"
+                  confirmButtonType="danger"
+                  cancelButtonType="plain"
+                  icon="el-icon-info"
+                  iconColor="red"
+                  title="정말 삭제하실 건가요?"
+                  @onConfirm="deleteDiary(diary.no)"
+                >
+                  <el-button
+                    class="btn-delete-diary"
+                    size="mini"
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                    slot="reference"
+                  ></el-button>
+                </el-popconfirm>
+              </div>
+              <h4 class="timeline-card-title" @click="getDetail(diary.no)">{{diary.title}}</h4>
+              <p class="timeline-card-writeat">{{changeKoreanDetailDateFmt(diary.writeat)}} 작성</p>
             </div>
-            <!-- MouseOver 삭제 버튼 보이기 -->
-            <span class="float-right" v-show="mouseOverNum == diary.no">
-              <button class="btn btn-danger btn-sm" @click="deleteDiary(diary.no)">삭제</button>
-            </span>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </el-main>
+
+    <!-- listmode가 card일 때 ------------------------------------------ -->
+    <el-main class="list-main" v-if="listmode == 'card'">
+      <div class="card-row">
+        <el-card
+          :class="{ active: mouseOverNum == diary.no }"
+          v-for="diary in diarylist"
+          :key="diary.no"
+        >
+          <div class="card-box">
+            <div
+              class="card-body"
+              @mouseover="changeMouseNum(diary.no)"
+              @mouseleave="changeMouseNum(0)"
+            >
+              <div v-show="mouseOverNum == diary.no">
+                <el-popconfirm
+                  confirmButtonText="네"
+                  cancelButtonText="아니에요"
+                  confirmButtonType="danger"
+                  cancelButtonType="plain"
+                  icon="el-icon-info"
+                  iconColor="red"
+                  title="정말 삭제하실 건가요?"
+                  @onConfirm="deleteDiary(diary.no)"
+                >
+                  <el-button
+                    class="btn-delete-diary"
+                    size="mini"
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                    slot="reference"
+                  ></el-button>
+                </el-popconfirm>
+              </div>
+              <div class="card-card-writeat margin-bottom-10">{{changeKoreanDateFmt(diary.writeat)}}</div>
+              <div
+                class="card-card-title margin-bottom-20"
+                @click="getDetail(diary.no)"
+              >{{diary.title}}</div>
+              <div class="card-card-content margin-left-20">{{diary.content}}</div>
+            </div>
           </div>
-        </div>
+        </el-card>
       </div>
-      <!-- diarylist 가 없을 경우, 보여줄 메세지 -->
-      <div id="notExistDiaryMsg" class="row" v-show="diarylist.length == 0">
-        <div class="col align-self-center">일기가 없습니다. 일기를 작성하세요.</div>
-      </div>
-      <!--'맨위로' 버튼:: scroll Y축이 150 내려갔을 경우, 맨위로 버튼 보이기 -->
-      <div id="btn-to-top" v-show="windowTop > 150">
-        <button @click="moveToTop" class="btn btn-warning btn-sm" style="color: white">TOP</button>
-      </div>
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -89,7 +155,9 @@ export default {
       // 마우스오버 시 해당하는 diary의 no를 담는 property
       mouseOverNum: 0,
 
-      //검색어 - diary.title 기준
+      //input 태그와 바인딩된 검색어 - diary.title 기준
+      inputKeyword: "",
+      //  state와 바인팅된 검색어
       keyword: "",
 
       // 정렬
@@ -113,6 +181,9 @@ export default {
   // computed: mapState(["diarylist"]),
   //    ==> mapState보다 아래처럼 사용
   computed: {
+    listmode() {
+      return this.$store.state.listmode;
+    },
     // v-for로 뿌려줄 array
     diarylist() {
       // includes() 검색어 :: data의 keyword를 parameter로 사용
@@ -151,13 +222,9 @@ export default {
     },
   },
   methods: {
-    // 짝수에 배경색 리턴하는 메소드
-    getEvenColor(index) {
-      // 홀수면 리턴
-      if ((index + 1) % 2 !== 0) {
-        return;
-      }
-      return "rgb(240, 240, 240)";
+    changeListMode(listmode) {
+      console.log(listmode);
+      this.$store.dispatch("changeListMode", { listmode: listmode });
     },
     // window 객체에 'scroll' 이벤트 핸들러
     onScroll(e) {
@@ -179,23 +246,24 @@ export default {
     },
     // 새로운 다이어리 추가하는 화면으로 라우팅
     moveToWrite() {
+      this.$store.dispatch("changeFormMode", {
+        formmode: "write",
+      });
       this.$router.push({
         name: "write",
       });
     },
     deleteDiary(no) {
-      if (confirm("정말로 삭제하시겠어요?")) {
-        this.$store.dispatch("deleteDiary", { no: no });
-        alert("삭제되었습니다.");
-      }
-    },
-    // 날짜 포맷 변환하는 메소드 (yyyy년 MM월 dd일)
-    changeDateFmt(dateString) {
-      return DateUtil.convertKoreanFmt(dateString);
+      this.$store.dispatch("deleteDiary", { no: no });
+      this.$message({
+        type: "info",
+        message: `${no}번 일기가 삭제되었어요.`,
+      });
     },
     // 검색어 변경하는 메소드
     changeKeyword() {
-      this.keyword = this.$refs.inputkeyword.value;
+      console.log(this.inputKeyword);
+      this.keyword = this.inputKeyword;
     },
     // 정렬, 검색 초기화 메소드
     setInitial() {
@@ -229,6 +297,14 @@ export default {
         this.sorting.soringOrder = true;
       }
     },
+    // 날짜 포맷 변환하는 메소드 (yyyy년 MM월 dd일)
+    changeKoreanDateFmt(dateString) {
+      return DateUtil.convertKoreanFmt(dateString);
+    },
+    // 날짜 포맷 변환하는 메소드 (yyyy년 MM월 dd일 오후(오전) HH시 mm분)
+    changeKoreanDetailDateFmt(dateString) {
+      return DateUtil.convertKoreanDetailFmt(dateString);
+    },
     // 맨위로 가기 버튼
     moveToTop() {
       window.scrollTo({
@@ -242,30 +318,127 @@ export default {
 </script>
 
 <style scoped>
-#notExistDiaryMsg {
+.list-header {
+  box-sizing: border-box;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(202, 202, 202);
+  margin-bottom: 20px;
+}
+.list-main {
+  height: 100vh;
+}
+.el-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
-  height: 300px;
-  font-size: 30px;
-  color: gray;
 }
-.card {
-  margin: 10px;
+.btn-group-view .el-button {
+  color: tomato;
+  border: 1px solid #fc7375;
 }
-.diary-title {
-  font-size: 17px;
+.btn-group-view .el-button:hover {
+  background-color: #fc7375;
+  color: white;
+}
+.el-button.btn-color {
+  background-color: #fc7375;
+  color: white;
+  border: 1px solid #f8b4b5;
+}
+.el-header .el-select {
+  width: 15%;
+}
+.el-header .input-search-keyword {
+  float: right;
+  /* justify-self: flex-end; */
+  width: 30%;
+}
+.el-timeline .el-card {
+  height: 130px;
+  margin-bottom: 25px;
+}
+.timeline-card-title {
+  font-size: 18px;
+  color: rgb(100, 93, 93);
   cursor: pointer;
+  /* float: left; */
 }
-.diary-title:hover {
-  color: seagreen;
+.timeline-card-title:hover {
   font-weight: bold;
+  color: tomato;
 }
+.timeline-card-writeat {
+  font-size: 13px;
+  color: tomato;
+  /* float: left; */
+}
+.el-card .btn-delete-diary {
+  float: right;
+}
+.card-row .el-card {
+  box-sizing: border-box;
+  height: 180px;
+  width: 280px;
+  margin: 15px 10px;
+  display: inline-block;
+}
+div.card-box {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.card-row .card-body {
+  padding: 0;
+  margin: 0;
+}
+.el-card .card-card-writeat {
+  font-size: 16px;
+  color: #fc7375;
+}
+.el-card .card-card-title {
+  height: 30px;
+  font-size: 18px;
+  color: rgb(95, 86, 86);
+  font-weight: bold;
+  cursor: pointer;
+  /* multiline overflow .. chrome 및 safari 에서만 동작.. cross-browsing */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.el-card .card-card-title:hover {
+  font-weight: bold;
+  color: tomato;
+}
+.el-card .card-card-content {
+  height: 40px;
+  font-size: 13px;
+  color: gray;
+  /* multiline overflow .. chrome 및 safari 에서만 동작.. cross-browsing */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .active {
-  background-color: rgb(236, 247, 234);
-  border: 2px solid seagreen;
+  border: 2px solid rgb(245, 95, 95);
 }
-#btn-to-top {
-  position: fixed;
-  top: 20%;
-  right: 3%;
+.margin-right-10 {
+  margin-right: 10px;
+}
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+.margin-bottom-20 {
+  margin-bottom: 15px;
+}
+.margin-left-20 {
+  margin-left: 10px;
 }
 </style>

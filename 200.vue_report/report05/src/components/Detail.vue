@@ -1,26 +1,58 @@
 <template>
-  <!-- mounted에서 넘겨받은 param으로 vuex에서 조회하고, -->
-  <!-- 일치하는 값이 없을 때 렌더링 되지 않도록, v-if 사용  -->
-  <div id="diary-wrapper" class="card" v-if="diary">
-    <div id="detail-header" class="pt-4 pb-2 card-header">
-      <div id="diary-title" class="h3 pb-3 mb-2 border-bottom">{{ diary.title }}</div>
-      <div class="row">
-        <div class="col-8 text-right align-self-center">
-          <span
-            class="diary-header-text"
-            id="diary-writeat"
-          >작성일시: {{ changeDateFmt(diary.writeat) }}</span>
-          <span class="diary-header-text" id="diary-writer">작성자: {{ diary.writer }}</span>
+  <div>
+    <!-- mounted에서 넘겨받은 param으로 vuex에서 조회하고, -->
+    <!-- 일치하는 값이 없을 때 렌더링 되지 않도록, v-if 사용  -->
+    <el-container class="detail-container" v-if="diary">
+      <el-header>
+        <el-header>
+          <el-page-header @back="goBack" content="일기 보기" title="뒤로가기"></el-page-header>
+        </el-header>
+      </el-header>
+      <el-main class="detail-main">
+        <div class="detail-header">
+          <div class="header-writeat">{{changeDateFmt(diary.writeat)}}</div>
+          <div class="header-title">{{diary.title}}</div>
+          <div class="btn-list">
+            <el-button
+              class="btn-back"
+              size="mini"
+              type="plain"
+              icon="el-icon-back"
+              circle
+              @click="moveToList"
+            ></el-button>
+            <el-button
+              class="btn-update"
+              size="mini"
+              icon="el-icon-edit"
+              circle
+              @click="moveToUpdate(diary.no)"
+            ></el-button>
+            <el-popconfirm
+              confirmButtonText="네"
+              cancelButtonText="아니에요"
+              confirmButtonType="danger"
+              cancelButtonType="plain"
+              icon="el-icon-info"
+              iconColor="red"
+              title="정말 삭제하실 건가요?"
+              @onConfirm="deleteDiary(diary.no)"
+            >
+              <el-button
+                class="btn-delete"
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                slot="reference"
+              ></el-button>
+            </el-popconfirm>
+          </div>
+          <div class="header-writer">작성자: {{diary.writer}}</div>
         </div>
-        <div class="col-4 text-right">
-          <button class="btn btn-danger btn-sm" @click="deleteDiary">삭제</button>
-        </div>
-      </div>
-    </div>
-    <div id="detail-body" class="card-body p3">
-      <!-- white-space : pre-line 설정. \n 줄바꿈을 함께 표시 -->
-      <div class="text-left" style="white-space: pre-line">{{ diary.content }}</div>
-    </div>
+        <div class="main-content">{{diary.content}}</div>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -40,7 +72,10 @@ export default {
         app.$store.state.diarylist.filter((d) => d.no == to.params.no).length ==
         0
       ) {
-        alert("일치하는 값이 없습니다.");
+        app.$message({
+          type: "warning",
+          message: "일치하는 일기가 없습니다.",
+        });
         next({
           name: "list",
         });
@@ -54,35 +89,91 @@ export default {
   },
   computed: mapState(["diary"]),
   methods: {
+    moveToList() {
+      this.$router.push({
+        name: "list",
+      });
+    },
+    moveToUpdate(no) {
+      this.$store.dispatch("changeFormMode", {
+        formmode: "update",
+        no: no,
+      });
+      this.$router.push({
+        name: "update",
+      });
+    },
     deleteDiary(no) {
-      if (confirm("정말로 삭제하시겠어요?")) {
-        this.$store.dispatch("deleteDiary", { no: this.no });
-        alert("삭제되었습니다.");
-        this.$router.push({
-          name: "list",
-        });
-      }
+      this.$store.dispatch("deleteDiary", { no: this.no });
+      this.$message({
+        type: "info",
+        message: `${no}번 일기가 삭제되었습니다.`,
+      });
+      this.moveToList();
     },
     // 화면에 표시할 날짜 양식 변환 (yyyy. MM. dd HH:mm)
     changeDateFmt(dateString) {
-      return DateUtil.convertDetailFmt(dateString);
+      return DateUtil.convertKoreanDetailFmt(dateString);
+    },
+    // 뒤로가기 버튼 이벤트 핸들러
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };
 </script>
 
 <style scoped>
-#diary-wrapper {
-  margin-top: 40px;
+.detail-container {
+  height: 87vh;
 }
-#diary-title {
-  color: seagreen;
-  font-weight: bolder;
+.detail-header {
+  box-sizing: border-box;
+  height: 130px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding: 0 30px;
+  border-bottom: 1px solid rgb(194, 187, 187);
 }
-.diary-header-text {
-  color: gray;
-  font-size: 15px;
-  margin-right: 20px;
+.header-writeat {
+  font-size: 18px;
+  color: tomato;
+  margin-bottom: 5px;
+}
+.header-title {
+  font-size: 26px;
+  color: rgb(133, 125, 124);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.header-writer {
+  font-size: 16px;
+  color: rgb(133, 125, 124);
   margin-left: 20px;
+}
+.btn-list {
+  float: right;
+}
+.btn-list .el-button {
+  margin: 0 5px;
+}
+.btn-update {
+  color: white;
+  background-color: rgb(161, 156, 156);
+}
+.btn-back:hover {
+  color: white;
+  background-color: #f8b4b5;
+  border: 1px solid #f8b4b5;
+}
+.btn-update:hover {
+  color: white;
+  background-color: gray;
+}
+.main-content {
+  color: rgb(133, 125, 124);
+  /* white-space : pre-line 설정. \n 줄바꿈을 함께 표시 */
+  white-space: pre-line;
+  padding: 0 40px;
 }
 </style>

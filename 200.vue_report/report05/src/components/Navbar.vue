@@ -3,17 +3,23 @@
     <el-menu-item index="1">
       <div @click="moveToList">Vue_diary_Heojeehaeng</div>
     </el-menu-item>
-    <el-menu-item>
-      <div @click="moveToListTable">listtable</div>
-    </el-menu-item>
     <el-menu-item class="info-login">
       <el-avatar class="margin-right-10">{{ id }}</el-avatar>
-      <div class="navbar-id-text margin-right-10">{{ id }}</div>님 환영합니다.
-      <el-button
-        class="btn-logout margin-left-10"
-        size="small"
-        @click="openLogoutMessageBox"
-      >Sign out</el-button>
+      <span>
+        <div class="navbar-id-text margin-right-10">{{ id }}</div>님 환영합니다.
+      </span>
+      <el-popconfirm
+        confirmButtonText="네"
+        cancelButtonText="아니에요"
+        confirmButtonType="danger"
+        cancelButtonType="plain"
+        icon="el-icon-info"
+        iconColor="red"
+        title="정말 로그아웃하실 건가요?"
+        @onConfirm="logout"
+      >
+        <el-button class="btn-logout margin-left-10" slot="reference">Sign out</el-button>
+      </el-popconfirm>
     </el-menu-item>
   </el-menu>
 </template>
@@ -33,16 +39,15 @@ export default {
     logout() {
       this.$store.dispatch("logout");
       this.$router.push({ name: "login" });
+      this.$message({
+        type: "info",
+        message: "로그아웃 완료!",
+      });
     },
     //에러메세지:  Uncaught (in promise) NavigationDuplicated: Avoided redundant navigation to current
     moveToList() {
       this.$router.push({ name: "list" }).catch((error) => {
         // console.log(error);
-      });
-    },
-    moveToListTable() {
-      this.$router.push({
-        name: "listtable",
       });
     },
     openLogoutMessageBox() {
@@ -109,6 +114,7 @@ export default {
 }
 .el-avatar {
   background-color: #fc7375;
+  border: 1px solid rgb(255, 201, 185);
 }
 .btn-logout {
   color: #ff4b4e;

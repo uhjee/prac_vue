@@ -1,12 +1,12 @@
 <template>
-  <div id="error-box" class="text-center row align-items-center">
-    <div id="message-box" class="col">
-      <div class="h2">요청이 잘못되었습니다.</div>
-      <div style="color: gray; margin-bottom: 20px;">로그인 화면으로 이동합니다.</div>
-      <div style="color: gray; margin-bottom: 20px; font-size: 30px">{{secondToMove}}</div>
-      <button class="btn btn-secondary btn-sm" @click="moveToLogin">로그인</button>
+  <el-container class="container-404 background-theme">
+    <div class="message-box">
+      <div class="title">요청이 잘못되었습니다.</div>
+      <div class="content">로그인 화면으로 이동합니다.</div>
+      <div class="second-text">{{secondToMove}}</div>
+      <button class="btn-login" @click="moveToLogin">로그인</button>
     </div>
-  </div>
+  </el-container>
 </template>
 
 <script>
@@ -58,18 +58,54 @@ export default {
 </script>
 
 <style scoped>
-#error-box {
-  border: 3px solid seagreen;
-  height: 250px;
-  width: 600px;
-  color: white;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -300px;
-  margin-top: -125px;
+.container-404 {
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#message-box {
-  color: seagreen;
+.background-theme {
+  background: #e1eec3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f05053,
+    #e1eec3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.message-box {
+  background-color: white;
+  width: 400px;
+  height: 300px;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.message-box .title {
+  font-size: 30px;
+  color: tomato;
+}
+.message-box .content {
+  font-size: 20px;
+  color: gray;
+}
+.message-box .second-text {
+  font-size: 30px;
+  color: tomato;
+}
+.btn-login {
+  background-color: #fc7375;
+  color: white;
+  border: 1px solid #f8b4b5;
 }
 </style>

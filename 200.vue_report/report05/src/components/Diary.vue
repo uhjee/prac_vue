@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="diary-container">
     <el-header>
       <navbar></navbar>
     </el-header>
@@ -38,8 +38,9 @@ export default {
 </script>
 
 <style scoped>
-.el-container.is-vertical {
-  background-color: rgb(228, 225, 220);
+/* .el-container.is-vertical { */
+.diary-container {
+  background-color: rgb(243, 234, 232);
 }
 .el-header {
   padding: 0;
@@ -62,7 +63,8 @@ export default {
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .el-main {
-  width: 900px;
+  /* width: 900px; */
+  width: 80%;
   margin: 0 auto;
   background-color: white;
 }
