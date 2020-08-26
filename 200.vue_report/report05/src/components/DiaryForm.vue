@@ -10,6 +10,22 @@
         <el-form-item label="Title" prop="title">
           <el-input v-model="writeForm.title" autofocus.native placeholder="제목을 입력하세요."></el-input>
         </el-form-item>
+        <el-form-item label="Weather" prop="weather">
+          <el-radio-group v-model="writeForm.weather">
+            <el-radio-button label="sunny">
+              <i class="el-icon-sunny"></i>
+            </el-radio-button>
+            <el-radio-button label="cloudy">
+              <i class="el-icon-cloudy"></i>
+            </el-radio-button>
+            <el-radio-button label="rain">
+              <i class="el-icon-heavy-rain"></i>
+            </el-radio-button>
+            <el-radio-button label="snow">
+              <i class="el-icon-light-rain"></i>
+            </el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="Content" prop="content">
           <el-input
             v-model="writeForm.content"
@@ -40,6 +56,7 @@ export default {
       writeForm: {
         title: "",
         content: "",
+        weather: "sunny",
       },
       // el-form이 제공하는 validation 을 위한 규칙들
       rules: {
