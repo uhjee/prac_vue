@@ -6,11 +6,16 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    // list component에서 timeline 형식 or card 형식 flag
     listmode: 'timeline',
+
+    // diaryForm component에서 wrtie 형식 or update 형식 flag
     formmode: 'write',
+
     // 로그인 여부를 확인할 property
     id: '',
-    // 상세보기 화면에서 일치하는 하나의 diary만 넣어줄 property
+
+    // detail / update 화면에서 일치하는 하나의 diary만 넣어줄 property
     diary: {
       no: 0,
       title: '',
@@ -20,6 +25,7 @@ const store = new Vuex.Store({
       writer: '',
       writeat: ''
     },
+
     //작성된 diary의 list_ dummy data
     diarylist: [{
         no: 1,
@@ -140,15 +146,18 @@ const store = new Vuex.Store({
       },
     ]
   },
+
   mutations: {
     // state.listmode 관련-------------------------------
     changeListMode: (state, payload) => {
       state.listmode = payload.listmode;
     },
+
     // state.formmode 관련-------------------------------
     changeFormMode: (state, payload) => {
       state.formmode = payload.formmode;
     },
+
     // state.id 관련-------------------------------
     loginUser: (state, payload) => {
       state.id = payload.id;
@@ -156,15 +165,18 @@ const store = new Vuex.Store({
     logout: (state) => {
       state.id = '';
     },
+
     // state.diary 관련-------------------------------
     // diary.no 로 하나의 diary 를 찾아 state에 넣어두는 mutation
     setDiaryOne: (state, payload) => {
       let arr = state.diarylist.filter((d) => d.no == payload.no);
       state.diary = arr[0];
     },
+
     deleteDiary: (state, payload) => {
       state.diarylist.splice(state.diarylist.findIndex(d => d.no == payload.no), 1);
     },
+
     addDiary: (state, payload) => {
 
       // diarylist에 sequence처럼 주기 위해.. 가장 큰 diary.no를 찾아오는 코드
@@ -183,6 +195,7 @@ const store = new Vuex.Store({
 
       state.diarylist.push(diary);
     },
+
     updateDiary: (state, payload) => {
       let index = state.diarylist.findIndex(d => d.no == state.diary.no);
       state.diarylist[index].title = payload.title;
@@ -191,11 +204,13 @@ const store = new Vuex.Store({
       state.diarylist[index].content = payload.content;
     }
   },
+
   actions: {
     // state.listmode 관련-------------------------------
     changeListMode: (store, payload) => {
       store.commit('changeListMode', payload);
     },
+
     // state.formmode 관련-------------------------------
     changeFormMode: (store, payload) => {
       if (payload.formmode == 'update') {
@@ -205,23 +220,29 @@ const store = new Vuex.Store({
         store.commit('changeFormMode', payload);
       }
     },
+
     // state.id 관련-------------------------------
     loginUser: (store, payload) => {
       store.commit('loginUser', payload);
     },
+
     logout: (store) => {
       store.commit('logout');
       // state.diary 관련-------------------------------
     },
+
     setDirayOne: (store, payload) => {
       store.commit('setDiaryOne', payload);
     },
+
     deleteDiary: (store, payload) => {
       store.commit('deleteDiary', payload);
     },
+
     addDiary: (store, payload) => {
       store.commit('addDiary', payload);
     },
+
     updateDiary: (store, payload) => {
       store.commit('updateDiary', payload);
     }

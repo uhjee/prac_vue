@@ -30,11 +30,13 @@ const routes = [
     component: Diary,
     // 중첩 라우팅을 위해 children에 하위 route 등록
     children: [{
+        // list (목록 보기)
         path: '/diary/list',
         name: 'list',
         component: List,
         props: true
       },
+      // detail (상세보기)
       {
         // parameter 숫자만 받도록 정규식 처리
         path: '/diary/:no(\\d+)',
@@ -42,12 +44,15 @@ const routes = [
         component: Detail,
         props: true
       },
+      // write
       {
         path: '/diary/write',
         name: 'write',
         component: DiaryForm,
         props: true
       },
+      // update
+      // path는 Detail과 동일 / component는 write와 동일
       {
         path: '/diary/:no(\\d+)',
         name: 'update',

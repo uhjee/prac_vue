@@ -6,11 +6,13 @@
         <!-- data의 listmode 에 따라서 버튼 토글 효과 -->
         <el-button
           icon="el-icon-tickets"
+          size="mini"
           :class="{ 'btn-color': listmode == 'timeline' }"
           @click="changeListMode('timeline')"
         ></el-button>
         <el-button
           icon="el-icon-menu"
+          size="mini"
           :class="{ 'btn-color': listmode == 'card' }"
           @click="changeListMode('card')"
         ></el-button>
@@ -23,6 +25,7 @@
         v-model="sorting.sortingField"
         placeholder="정렬"
         ref="sortingcondition"
+        size="mini"
       >
         <el-option label="작성일" value="writeat"></el-option>
         <el-option label="내 용" value="content"></el-option>
@@ -50,7 +53,7 @@
           <i class="el-icon-search"></i>
         </template>
       </el-input>
-      <el-button type="plian" @click="setInitial">초기화</el-button>
+      <el-button size="mini" type="plian" @click="setInitial">초기화</el-button>
     </el-header>
     <!-- listmode가 timeline일 때 ------------------------------------------ -->
     <el-main class="list-main" v-if="listmode== 'timeline'">
@@ -195,9 +198,11 @@ export default {
   beforeDestroy() {
     window.removeEventListener("scroll", this.onScroll);
   },
+
   // computed: mapState(["diarylist"]),
   //    ==> mapState보다 아래처럼 사용
   computed: {
+    // 'timeline' or 'card'
     listmode() {
       return this.$store.state.listmode;
     },
@@ -210,6 +215,7 @@ export default {
         .sort((a, b) => {
           // data의 sorting 에 따른 분기처리..
           // TODO: 정리...
+          // 작성일 기준 sorting
           if (this.sorting.sortingField == "writeat") {
             if (this.sorting.soringOrder == false) {
               return (
@@ -222,12 +228,14 @@ export default {
                 new Date(b[this.sorting.sortingField])
               );
             }
+            // 제목 기준 sorting
           } else if (this.sorting.sortingField == "title") {
             if (this.sorting.soringOrder == false) {
               return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
             } else {
               return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
             }
+            // 내용 기준 sorting
           } else if (this.sorting.sortingField == "content") {
             if (this.sorting.soringOrder == false) {
               return a.content > b.content ? -1 : a.content < b.content ? 1 : 0;
@@ -239,14 +247,12 @@ export default {
     },
   },
   methods: {
+    // 'timeline' or 'card' 전환 메소드
     changeListMode(listmode) {
       console.log(listmode);
       this.$store.dispatch("changeListMode", { listmode: listmode });
     },
-    // window 객체에 'scroll' 이벤트 핸들러
-    onScroll(e) {
-      this.windowTop = window.top.scrollY;
-    },
+
     // v-for 개별 인덱스마다 mouseover 이벤트를 걸기 위한 메소드
     changeMouseNum(no) {
       this.mouseOverNum = no;
@@ -293,28 +299,6 @@ export default {
       this.sorting.sortingField = "writeat";
       this.sorting.soringOrder = false;
     },
-    // 정렬기준을 바꾸는 메소드
-    changeSortingCondition() {
-      // select element의 첫글자
-      //      t -> title 기준
-      if (this.$refs.sortingcondition.value[0] == "t") {
-        this.sorting.sortingField = "title";
-        //      c -> content 기준
-      } else if (this.$refs.sortingcondition.value[0] == "c") {
-        this.sorting.sortingField = "content";
-        //      n -> no 기준
-      } else if (this.$refs.sortingcondition.value[0] == "w") {
-        this.sorting.sortingField = "writeat";
-      }
-
-      // select element의 두번째 글자가 0 -> 내림차순 : false
-      // select element의 두번째 글자가 1 -> 오름차순 : true
-      if (this.$refs.sortingcondition.value[1] == "0") {
-        this.sorting.soringOrder = false;
-      } else {
-        this.sorting.soringOrder = true;
-      }
-    },
     // 날짜 포맷 변환하는 메소드 (yyyy년 MM월 dd일)
     changeKoreanDateFmt(dateString) {
       return DateUtil.convertKoreanFmt(dateString);
@@ -322,6 +306,10 @@ export default {
     // 날짜 포맷 변환하는 메소드 (yyyy년 MM월 dd일 오후(오전) HH시 mm분)
     changeKoreanDetailDateFmt(dateString) {
       return DateUtil.convertKoreanDetailFmt(dateString);
+    },
+    // window 객체에 'scroll' 이벤트 핸들러
+    onScroll(e) {
+      this.windowTop = window.top.scrollY;
     },
     // TODO:: 맨위로 가기 버튼 .. 내부 스크롤을 잡지 못한다..
     moveToTop() {
@@ -372,7 +360,7 @@ export default {
   color: #fc7375;
 }
 .el-header .input-search-keyword {
-  width: 30%;
+  width: 20%;
 }
 .el-timeline .el-card {
   height: 130px;

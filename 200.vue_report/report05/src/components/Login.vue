@@ -2,7 +2,12 @@
   <el-container class="login-container background-theme">
     <div class="login-box">
       <!-- form tag에 model 과 validation을 위한 rules를 바인딩 -->
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        class="demo-ruleForm"
+      >
         <div class="login-margin-bottom">VueDiary_HeoJeeHaeng</div>
         <!-- el-form tag 의 자식 컴포넌트이기 때문에 prop으로 model의 데이터를 받는다 -->
         <el-form-item prop="id">
@@ -22,7 +27,9 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button class="btn-login" @click="submitForm('ruleForm')">sign in</el-button>
+          <el-button class="btn-login" @click="submitForm('ruleForm')"
+            >sign in</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -40,50 +47,51 @@ export default {
   data() {
     return {
       ruleForm: {
-        id: "",
+        id: ""
       },
+      // form에 대한 validation rules
       rules: {
         id: [
           {
             required: true,
             message: "id를 입력해주세요",
-            trigger: "blur",
+            trigger: "blur"
           },
           {
             min: 3,
             max: 10,
             message: "3글자에서 10글자로 입력해주세요",
-            trigger: "blur",
-          },
-        ],
-      },
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   methods: {
     submitForm(formName) {
       // el-form 의 이벤트 _ validation check
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           // state.id 세팅
           this.$store.dispatch("loginUser", { id: this.ruleForm.id });
 
           this.$router
             .push({
-              name: "list",
+              name: "list"
             })
-            .catch((e) => {
+            .catch(e => {
               console.log(e);
             });
           this.$message({
-            message: `${this.ruleForm.id}님, 반갑습니다 ;)`,
+            message: `${this.ruleForm.id}님, 반갑습니다 ;)`
           });
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
           return false;
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,4 +1,5 @@
 <template>
+  <!-- 실제 data를 갖지 않고 내부 view 의 layout만 담당 -->
   <el-container class="diary-container">
     <el-header>
       <navbar></navbar>

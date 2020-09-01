@@ -3,9 +3,11 @@
   <!-- 쓰기와 수정하기는 한 화면에서 vuex의 state 의 formmode를 통해 동적 구성 -->
   <el-container class="write-container">
     <el-header>
+      <!-- 페이지 제목 formmode: write / update에 따라 동적으로 구성 -->
       <el-page-header @back="goBack" :content="headingText" title="뒤로가기"></el-page-header>
     </el-header>
     <el-main>
+      <!-- el-form tag :: form validation(규칙은 rules에 서술) 제공 -->
       <el-form :model="writeForm" :rules="rules" ref="writeForm" label-width="80px">
         <!-- 제목 input -->
         <el-form-item label="Title" prop="title">
@@ -49,7 +51,9 @@
             show-word-limit
           ></el-input>
         </el-form-item>
+        <!-- form submit 버튼 -->
         <el-form-item class="btn-list">
+          <!-- 버튼 텍스트 formmode: write / update에 따라 동적으로 구성 -->
           <el-button class="btn-submit" @click="onSubmit('writeForm')">{{btnText}}</el-button>
           <el-button @click="moveToList">취 소</el-button>
         </el-form-item>
